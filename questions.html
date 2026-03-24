@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>প্রশ্নব্যাংক — BCS প্রস্তুতি</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.q-layout { display:grid;grid-template-columns:240px 1fr;gap:1.5rem;align-items:start; }
+.sidebar {
+  background:#fff;border:1px solid var(--border);border-radius:12px;
+  padding:1.25rem;position:sticky;top:74px;
+}
+.sidebar h3 { font-size:.83rem;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.75rem; }
+.sidebar-link {
+  display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;
+  font-size:.88rem;cursor:pointer;border:none;background:none;width:100%;
+  text-align:left;font-family:'Hind Siliguri',sans-serif;color:var(--ink);
+  transition:all .15s;margin-bottom:2px;
+}
+.sidebar-link:hover { background:var(--paper); }
+.sidebar-link.active { background:var(--ink);color:var(--gold);font-weight:600; }
+.sidebar-link .cnt { margin-left:auto;font-size:.72rem;opacity:.6; }
+.sidebar-divider { height:1px;background:var(--border);margin:.75rem 0; }
+
+.q-card {
+  background:#fff;border:1px solid var(--border);border-radius:12px;
+  padding:1.25rem 1.5rem;margin-bottom:1rem;animation:fadeUp .25s ease both;
+  transition:border-color .2s;
+}
+.q-card:hover { border-color:rgba(26,26,46,.2); }
+.q-meta { display:flex;align-items:center;gap:8px;margin-bottom:.75rem;flex-wrap:wrap; }
+.q-num { font-size:.7rem;font-weight:700;background:var(--paper2);color:var(--muted);padding:2px 8px;border-radius:6px; }
+.status-dot { width:8px;height:8px;border-radius:50%;background:#ddd;flex-shrink:0; }
+.status-dot.done { background:var(--teal2); }
+.status-dot.review { background:var(--gold); }
+.q-text { font-size:.95rem;line-height:1.8;margin-bottom:1rem; }
+.q-actions { display:flex;gap:8px;flex-wrap:wrap; }
+
+.ai-panel {
+  margin-top:1rem;background:#f0f8f5;border:1px solid rgba(14,102,85,.18);
+  border-radius:10px;padding:1.25rem;display:none;
+}
+.ai-panel.show { display:block;animation:fadeUp .25s ease; }
+.ai-header { display:flex;align-items:center;gap:8px;margin-bottom:.75rem; }
+.ai-spinner { width:12px;height:12px;border:2px solid var(--teal2);border-top-color:transparent;border-radius:50%; }
+.ai-answer { font-size:.9rem;line-height:1.85;white-space:pre-wrap; }
+
+.note-area { margin-top:1rem;display:none; }
+.note-area.show { display:block;animation:fadeUp .2s ease; }
+
+.guide-section { margin-top:2rem; }
+.guide-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem; }
+.guide-card { background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s; }
+.guide-card:hover { box-shadow:var(--shadow);transform:translateY(-2px); }
+.guide-top { padding:1.25rem; }
+.guide-icon-wrap { width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:.75rem; }
+.guide-card h3 { font-family:'Noto Serif Bengali',serif;font-size:1rem;font-weight:700;margin-bottom:.35rem; }
+.guide-card p { font-size:.8rem;color:var(--muted);line-height:1.6; }
+.guide-bottom { padding:.75rem 1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between; }
+
+/* guide detail */
+.guide-detail { display:none; }
+.guide-detail.show { display:block;animation:fadeUp .25s ease; }
+.kp-list { list-style:none;display:flex;flex-direction:column;gap:10px; }
+.kp-list li { display:flex;gap:10px;font-size:.9rem;line-height:1.75; }
+.kp-arrow { color:var(--accent);font-weight:700;flex-shrink:0; }
+
+@media(max-width:700px){
+  .q-layout { grid-template-columns:1fr; }
+  .sidebar { position:static; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a class="logo" href="index.html">BCS <span>প্রস্তুতি</span></a>
+    <nav>
+      <a class="nav-link" href="index.html"><span class="nav-icon">🏠</span>হোম</a>
+      <a class="nav-link active" href="questions.html"><span class="nav-icon">📚</span>প্রশ্নব্যাংক</a>
+      <a class="nav-link" href="mock-test.html"><span class="nav-icon">✍️</span>মক টেস্ট</a>
+      <a class="nav-link" href="flashcards.html"><span class="nav-icon">🃏</span>Flashcard</a>
+      <a class="nav-link" href="progress.html"><span class="nav-icon">📈</span>Progress</a>
+      <a class="nav-link" href="ai-chat.html"><span class="nav-icon">🤖</span>AI সহায়তা</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="hero-tag">সকল বিষয়</div>
+    <h1>প্রশ্নব্যাংক</h1>
+    <p>লিখিত প্রশ্ন · AI ব্যাখ্যা · নোট সংরক্ষণ · স্টাডি গাইড</p>
+  </div>
+</div>
+
+<div class="container" style="padding-top:1.5rem;">
+  <div id="bankView">
+    <div class="q-layout">
+      <div class="sidebar">
+        <h3>বিষয়</h3>
+        <button class="sidebar-link active" onclick="filterSub('all',this)">সব বিষয় <span class="cnt" id="cnt-all"></span></button>
+        <button class="sidebar-link" onclick="filterSub('international',this)">🌐 আন্তর্জাতিক <span class="cnt" id="cnt-international"></span></button>
+        <button class="sidebar-link" onclick="filterSub('bangladesh',this)">🇧🇩 বাংলাদেশ <span class="cnt" id="cnt-bangladesh"></span></button>
+        <button class="sidebar-link" onclick="filterSub('bangla',this)">📖 বাংলা <span class="cnt" id="cnt-bangla"></span></button>
+        <button class="sidebar-link" onclick="filterSub('english',this)">🔤 English <span class="cnt" id="cnt-english"></span></button>
+        <button class="sidebar-link" onclick="filterSub('math',this)">🔢 গণিত <span class="cnt" id="cnt-math"></span></button>
+        <button class="sidebar-link" onclick="filterSub('science',this)">🔬 বিজ্ঞান <span class="cnt" id="cnt-science"></span></button>
+        <div class="sidebar-divider"></div>
+        <h3>অবস্থা</h3>
+        <button class="sidebar-link" onclick="filterStatus('all',this)" id="sAll">সব</button>
+        <button class="sidebar-link" onclick="filterStatus('unseen',this)" id="sUnseen">⬜ পড়িনি</button>
+        <button class="sidebar-link" onclick="filterStatus('done',this)" id="sDone">✅ সম্পন্ন</button>
+        <button class="sidebar-link" onclick="filterStatus('review',this)" id="sReview">🔁 রিভিউ</button>
+        <div class="sidebar-divider"></div>
+        <a href="#guide" class="sidebar-link" onclick="showGuide()">📝 স্টাডি গাইড</a>
+      </div>
+      <div>
+        <div class="sec-head">
+          <div class="sec-title" id="bankTitle">সকল প্রশ্ন</div>
+          <span class="badge" id="bankCount"></span>
+        </div>
+        <div id="qGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="guide-section" id="guideSection" style="display:none;">
+    <button class="btn btn-ghost" onclick="hideGuide()" style="margin-bottom:1.25rem;">← প্রশ্নব্যাংকে ফিরে যাও</button>
+    <div class="guide-list" id="guideListView">
+      <div class="sec-head"><div class="sec-title">স্টাডি গাইড</div></div>
+      <div class="guide-grid" id="guideGrid"></div>
+    </div>
+    <div class="guide-detail" id="guideDetail"></div>
+  </div>
+</div>
+
+<!-- API Modal -->
+<div class="modal-overlay hidden" id="apiModal">
+  <div class="modal">
+    <h2>🔑 API Key প্রয়োজন</h2>
+    <p>AI ব্যাখ্যা পেতে Anthropic API key দাও। Browser-এ সংরক্ষিত থাকবে।</p>
+    <input type="password" id="apiKeyInput" placeholder="sk-ant-..." style="margin-bottom:1rem;" />
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-secondary" style="flex:1;" onclick="saveKey()">সংরক্ষণ করো</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('apiModal').classList.add('hidden')">বাতিল</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="js/data.js"></script>
+<script>
+let curSub = 'all', curStatus = 'all';
+
+// Read URL param
+const urlSub = new URLSearchParams(location.search).get('sub');
+if (urlSub) curSub = urlSub;
+
+function getFiltered() {
+  return QUESTIONS.filter(q => {
+    const subOk = curSub === 'all' || q.subject === curSub;
+    const st = Progress.getStatus(q.id);
+    const stOk = curStatus === 'all' || st === curStatus;
+    return subOk && stOk;
+  });
+}
+
+function renderCounts() {
+  document.getElementById('cnt-all').textContent = QUESTIONS.length;
+  SUBJECTS.forEach(s => {
+    const el = document.getElementById('cnt-' + s.id);
+    if (el) el.textContent = QUESTIONS.filter(q => q.subject === s.id).length;
+  });
+}
+
+function renderQuestions() {
+  const qs = getFiltered();
+  document.getElementById('bankCount').textContent = qs.length + 'টি';
+  const grid = document.getElementById('qGrid');
+  if (!qs.length) { grid.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--muted);">কোনো প্রশ্ন পাওয়া যায়নি</div>'; return; }
+  grid.innerHTML = qs.map((q,i) => {
+    const tc = TOPIC_CONFIG[q.topic] || {};
+    const st = Progress.getStatus(q.id);
+    return `
+    <div class="q-card" style="animation-delay:${i*0.04}s" id="qc-${q.id}">
+      <div class="q-meta">
+        <div class="status-dot ${st}" title="${st}"></div>
+        <span class="q-num">${q.num}</span>
+        <span class="tag ${tc.cls||''}">${tc.label||''}</span>
+      </div>
+      <div class="q-text">${q.text}</div>
+      <div class="q-actions">
+        <button class="btn btn-primary" onclick="getAI('${q.id}',this)" style="font-size:.8rem;padding:7px 15px;">✦ AI ব্যাখ্যা</button>
+        <button class="btn btn-ghost" onclick="toggleNote('${q.id}')" style="font-size:.8rem;padding:7px 14px;">📝 নোট</button>
+        <button class="btn btn-teal" onclick="markDone('${q.id}')" style="font-size:.8rem;padding:7px 14px;" id="done-${q.id}">${st==='done'?'✅ সম্পন্ন':'☑ সম্পন্ন করো'}</button>
+        <button class="btn btn-ghost" onclick="markReview('${q.id}')" style="font-size:.8rem;padding:7px 14px;">🔁 রিভিউ</button>
+      </div>
+      <div class="ai-panel" id="ai-${q.id}">
+        <div class="ai-header"><div class="ai-spinner spin" id="spin-${q.id}" style="display:none;"></div><span style="font-size:.72rem;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;">AI উত্তর</span></div>
+        <div class="ai-answer" id="ans-${q.id}"></div>
+      </div>
+      <div class="note-area" id="note-${q.id}">
+        <textarea rows="3" style="margin-top:.5rem;" placeholder="এই প্রশ্নের নোট লিখুন..." id="ni-${q.id}">${Notes.get(q.id)}</textarea>
+        <button class="btn btn-teal" style="margin-top:6px;font-size:.8rem;" onclick="saveNote('${q.id}')">সংরক্ষণ</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterSub(sub, el) {
+  curSub = sub;
+  document.querySelectorAll('.sidebar-link').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const s = SUBJECTS.find(x => x.id === sub);
+  document.getElementById('bankTitle').textContent = sub === 'all' ? 'সকল প্রশ্ন' : (s ? s.label : sub);
+  renderQuestions();
+}
+
+function filterStatus(st, el) {
+  curStatus = st;
+  document.querySelectorAll('#sAll,#sUnseen,#sDone,#sReview').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderQuestions();
+}
+
+function markDone(id) {
+  Progress.mark(id, 'done');
+  renderQuestions();
+  showToast('✅ সম্পন্ন হিসেবে চিহ্নিত');
+}
+function markReview(id) {
+  Progress.mark(id, 'review');
+  renderQuestions();
+  showToast('🔁 রিভিউতে যোগ করা হয়েছে');
+}
+
+async function getAI(id, btn) {
+  const key = getApiKey();
+  if (!key) { document.getElementById('apiModal').classList.remove('hidden'); return; }
+  const q = QUESTIONS.find(x => x.id === id);
+  const panel = document.getElementById('ai-' + id);
+  const ans = document.getElementById('ans-' + id);
+  const spin = document.getElementById('spin-' + id);
+  panel.classList.add('show');
+  btn.disabled = true; btn.textContent = '⏳ তৈরি হচ্ছে...';
+  ans.textContent = ''; spin.style.display = 'block';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514', max_tokens:1000,
+        system:'তুমি BCS পরীক্ষার বিশেষজ্ঞ। বাংলায় উত্তর দাও। কাঠামোগত, তথ্যপূর্ণ এবং পরীক্ষা-উপযোগী উত্তর দাও। সর্বোচ্চ ৪০০ শব্দ।',
+        messages:[{role:'user', content:q.text}]
+      })
+    });
+    const data = await res.json();
+    ans.textContent = data.content[0].text;
+  } catch(e) { ans.textContent = '❌ ত্রুটি: ' + e.message; }
+  finally { btn.disabled=false; btn.textContent='✦ AI ব্যাখ্যা'; spin.style.display='none'; }
+}
+
+function toggleNote(id) {
+  const el = document.getElementById('note-' + id);
+  el.classList.toggle('show');
+}
+function saveNote(id) {
+  Notes.set(id, document.getElementById('ni-' + id).value);
+  showToast('✓ নোট সংরক্ষিত');
+}
+function saveKey() {
+  const v = document.getElementById('apiKeyInput').value.trim();
+  if (!v.startsWith('sk-')) { showToast('সঠিক key দাও'); return; }
+  setApiKey(v); document.getElementById('apiModal').classList.add('hidden'); showToast('✓ API key সংরক্ষিত');
+}
+
+// Guide
+function showGuide() {
+  document.getElementById('bankView').style.display = 'none';
+  document.getElementById('guideSection').style.display = 'block';
+  renderGuides();
+}
+function hideGuide() {
+  document.getElementById('bankView').style.display = 'block';
+  document.getElementById('guideSection').style.display = 'none';
+}
+function renderGuides() {
+  document.getElementById('guideGrid').innerHTML = GUIDES.map(g => `
+    <div class="guide-card" onclick="openGuide('${g.id}')">
+      <div class="guide-top">
+        <div class="guide-icon-wrap" style="background:${g.color};">${g.icon}</div>
+        <h3>${g.title}</h3>
+        <p>${g.summary}</p>
+      </div>
+      <div class="guide-bottom">
+        <span style="font-size:.78rem;color:var(--muted);">${QUESTIONS.filter(q=>q.topic===g.id).length}টি প্রশ্ন</span>
+        <span style="color:var(--accent);">→</span>
+      </div>
+    </div>`).join('');
+}
+function openGuide(id) {
+  const g = GUIDES.find(x=>x.id===id);
+  const relQs = QUESTIONS.filter(q=>q.topic===id);
+  const savedNote = Notes.get('guide_'+id);
+  document.getElementById('guideListView').style.display='none';
+  const det = document.getElementById('guideDetail');
+  det.classList.add('show');
+  det.innerHTML = `
+    <button class="btn btn-ghost" onclick="closeGuide()" style="margin-bottom:1.25rem;">← গাইড তালিকায় ফিরে যাও</button>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
+      <div style="width:44px;height:44px;border-radius:10px;background:${g.color};display:flex;align-items:center;justify-content:center;font-size:1.4rem;">${g.icon}</div>
+      <div><h2 style="font-family:'Noto Serif Bengali',serif;font-size:1.35rem;">${g.title}</h2>
+      <p style="font-size:.82rem;color:var(--muted);">${relQs.length}টি সম্পর্কিত প্রশ্ন</p></div>
+    </div>
+    <div class="card" style="margin-bottom:1.25rem;">
+      <h3 style="font-family:'Noto Serif Bengali',serif;font-size:1rem;margin-bottom:1rem;">📌 মূল পয়েন্ট</h3>
+      <ul class="kp-list">${g.keyPoints.map(p=>`<li><span class="kp-arrow">▸</span><span>${p}</span></li>`).join('')}</ul>
+    </div>
+    <div class="card" style="margin-bottom:1.25rem;">
+      <h3 style="font-family:'Noto Serif Bengali',serif;font-size:1rem;margin-bottom:1rem;">❓ সম্পর্কিত প্রশ্ন</h3>
+      ${relQs.map(q=>`<div style="background:var(--paper);border-radius:8px;padding:10px 14px;font-size:.87rem;line-height:1.75;margin-bottom:8px;"><strong style="color:var(--muted);font-size:.72rem;">${q.num}</strong><br>${q.text}</div>`).join('')}
+    </div>
+    <div class="card">
+      <h3 style="font-family:'Noto Serif Bengali',serif;font-size:1rem;margin-bottom:.75rem;">📝 আমার নোট</h3>
+      <textarea rows="4" id="gnote-${id}" placeholder="এই টপিকে নোট লিখুন...">${savedNote}</textarea>
+      <button class="btn btn-teal" style="margin-top:8px;" onclick="saveGuideNote('${id}')">সংরক্ষণ করো</button>
+    </div>`;
+}
+function closeGuide() {
+  document.getElementById('guideListView').style.display='block';
+  document.getElementById('guideDetail').classList.remove('show');
+  document.getElementById('guideDetail').innerHTML='';
+}
+function saveGuideNote(id) {
+  Notes.set('guide_'+id, document.getElementById('gnote-'+id).value);
+  showToast('✓ নোট সংরক্ষিত');
+}
+
+renderCounts();
+renderQuestions();
+if (urlSub) {
+  const btn = document.querySelector(`.sidebar-link[onclick*="${urlSub}"]`);
+  if (btn) { document.querySelector('.sidebar-link.active')?.classList.remove('active'); btn.classList.add('active'); }
+  const s = SUBJECTS.find(x => x.id === urlSub);
+  if (s) document.getElementById('bankTitle').textContent = s.label;
+}
+</script>
+</body>
+</html>

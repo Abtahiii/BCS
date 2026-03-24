@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcard — BCS প্রস্তুতি</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.fc-wrap { max-width:620px;margin:0 auto; }
+.fc-controls { display:flex;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center; }
+.fc-controls select { width:auto;flex:1;min-width:180px; }
+.fc-stats { display:flex;gap:1rem;font-size:.82rem;color:var(--muted); }
+
+.card-area { perspective:1200px;margin-bottom:1.25rem;cursor:pointer; }
+.card-inner {
+  position:relative;width:100%;height:260px;
+  transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.4,0,.2,1);
+}
+.card-inner.flipped { transform:rotateY(180deg); }
+.card-face {
+  position:absolute;inset:0;
+  background:#fff;border:1px solid var(--border);border-radius:16px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:2rem;text-align:center;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+}
+.card-face-back { transform:rotateY(180deg); }
+.card-face-front { border-top:4px solid var(--gold); }
+.card-face-back { border-top:4px solid var(--teal2); }
+.card-label { font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem; }
+.card-content { font-family:'Noto Serif Bengali',serif;font-size:1.1rem;line-height:1.7;color:var(--ink); }
+.card-hint { font-size:.8rem;color:var(--muted);margin-top:.75rem; }
+
+.fc-nav { display:flex;align-items:center;justify-content:space-between;gap:10px; }
+.fc-counter { font-family:'Noto Serif Bengali',serif;font-size:1.1rem;font-weight:700; }
+.fc-actions { display:flex;gap:8px; }
+
+.dot-row { display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin:1rem 0; }
+.dot { width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .2s;cursor:pointer; }
+.dot.current { background:var(--gold); }
+.dot.known { background:var(--teal2); }
+.dot.unknown { background:var(--accent); }
+
+.known-badge { display:inline-block;padding:3px 10px;border-radius:10px;font-size:.72rem;font-weight:700; }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a class="logo" href="index.html">BCS <span>প্রস্তুতি</span></a>
+    <nav>
+      <a class="nav-link" href="index.html"><span class="nav-icon">🏠</span>হোম</a>
+      <a class="nav-link" href="questions.html"><span class="nav-icon">📚</span>প্রশ্নব্যাংক</a>
+      <a class="nav-link" href="mock-test.html"><span class="nav-icon">✍️</span>মক টেস্ট</a>
+      <a class="nav-link active" href="flashcards.html"><span class="nav-icon">🃏</span>Flashcard</a>
+      <a class="nav-link" href="progress.html"><span class="nav-icon">📈</span>Progress</a>
+      <a class="nav-link" href="ai-chat.html"><span class="nav-icon">🤖</span>AI সহায়তা</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="hero-tag">দ্রুত রিভিশন</div>
+    <h1>🃏 Flashcard</h1>
+    <p>কার্ডে ক্লিক করো → উত্তর দেখো → জানা/অজানা চিহ্নিত করো</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="fc-wrap">
+    <div class="fc-controls">
+      <select id="subFilter" onchange="applyFilter()">
+        <option value="all">সব বিষয়</option>
+        <option value="international">আন্তর্জাতিক</option>
+        <option value="bangladesh">বাংলাদেশ</option>
+        <option value="bangla">বাংলা</option>
+        <option value="science">বিজ্ঞান</option>
+      </select>
+      <select id="modeFilter" onchange="applyFilter()">
+        <option value="all">সব কার্ড</option>
+        <option value="unknown">অজানা কার্ড</option>
+        <option value="known">জানা কার্ড</option>
+      </select>
+      <button class="btn btn-ghost" onclick="shuffle()" style="font-size:.82rem;">🔀 Shuffle</button>
+    </div>
+
+    <div class="fc-stats" id="fcStats"></div>
+
+    <div class="dot-row" id="dotRow"></div>
+
+    <div class="card-area" onclick="flipCard()">
+      <div class="card-inner" id="cardInner">
+        <div class="card-face card-face-front">
+          <div class="card-label">প্রশ্ন</div>
+          <div class="card-content" id="cardFront"></div>
+          <div class="card-hint">ক্লিক করো উত্তর দেখতে</div>
+        </div>
+        <div class="card-face card-face-back">
+          <div class="card-label">উত্তর</div>
+          <div class="card-content" id="cardBack"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-nav">
+      <button class="btn btn-ghost" onclick="prev()">← আগের</button>
+      <div style="text-align:center;">
+        <div class="fc-counter" id="fcCounter">১/১০</div>
+        <div id="cardStatus" style="margin-top:4px;"></div>
+      </div>
+      <button class="btn btn-ghost" onclick="next()">পরের →</button>
+    </div>
+
+    <div class="fc-actions" style="justify-content:center;margin-top:1.25rem;">
+      <button class="btn btn-teal" onclick="markCard('known')" style="flex:1;max-width:180px;">✅ জানি</button>
+      <button class="btn btn-primary" onclick="markCard('unknown')" style="flex:1;max-width:180px;">❌ জানি না</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="js/data.js"></script>
+<script>
+let cards = [], curCard = 0, cardStatus = {}, flipped = false;
+
+function loadStatus() { cardStatus = JSON.parse(localStorage.getItem('bcs_fc_status')||'{}'); }
+function saveStatus() { localStorage.setItem('bcs_fc_status', JSON.stringify(cardStatus)); }
+
+function applyFilter() {
+  loadStatus();
+  const sub = document.getElementById('subFilter').value;
+  const mode = document.getElementById('modeFilter').value;
+  let pool = FLASHCARDS.filter(f => sub==='all' || f.subject===sub);
+  if (mode === 'known') pool = pool.filter(f => cardStatus[f.id]==='known');
+  if (mode === 'unknown') pool = pool.filter(f => cardStatus[f.id]!=='known');
+  cards = pool; curCard = 0; flipped = false;
+  renderCard();
+  updateStats();
+}
+
+function shuffle() {
+  cards = [...cards].sort(()=>Math.random()-.5);
+  curCard = 0; flipped = false;
+  renderCard(); showToast('🔀 Shuffled!');
+}
+
+function flipCard() {
+  flipped = !flipped;
+  document.getElementById('cardInner').classList.toggle('flipped', flipped);
+}
+
+function renderCard() {
+  if (!cards.length) {
+    document.getElementById('cardFront').textContent = 'কোনো কার্ড নেই';
+    document.getElementById('cardBack').textContent = '';
+    document.getElementById('fcCounter').textContent = '০/০';
+    document.getElementById('dotRow').innerHTML = '';
+    return;
+  }
+  const c = cards[curCard];
+  document.getElementById('cardFront').textContent = c.front;
+  document.getElementById('cardBack').textContent = c.back;
+  document.getElementById('fcCounter').textContent = `${curCard+1}/${cards.length}`;
+  document.getElementById('cardInner').classList.remove('flipped');
+  flipped = false;
+
+  const st = cardStatus[c.id];
+  const statusEl = document.getElementById('cardStatus');
+  if (st === 'known') statusEl.innerHTML = '<span class="known-badge" style="background:#d1fae5;color:#065f46;">✅ জানা</span>';
+  else if (st === 'unknown') statusEl.innerHTML = '<span class="known-badge" style="background:#fde8e8;color:#991b1b;">❌ অজানা</span>';
+  else statusEl.innerHTML = '';
+
+  // dots
+  const dots = cards.map((c2,i) => {
+    const s2 = cardStatus[c2.id];
+    const cls = i===curCard ? 'current' : s2==='known' ? 'known' : s2==='unknown' ? 'unknown' : '';
+    return `<div class="dot ${cls}" onclick="goTo(${i})"></div>`;
+  }).join('');
+  document.getElementById('dotRow').innerHTML = dots;
+}
+
+function goTo(i) { curCard=i; flipped=false; renderCard(); }
+function prev() { if(curCard>0){curCard--;flipped=false;renderCard();} }
+function next() { if(curCard<cards.length-1){curCard++;flipped=false;renderCard();} }
+
+function markCard(status) {
+  if(!cards.length) return;
+  cardStatus[cards[curCard].id] = status;
+  saveStatus();
+  updateStats();
+  renderCard();
+  if(status==='known') showToast('✅ জানা হিসেবে চিহ্নিত');
+  else showToast('❌ অজানা হিসেবে চিহ্নিত');
+  if(curCard < cards.length-1) setTimeout(next, 300);
+}
+
+function updateStats() {
+  const total = cards.length;
+  const known = cards.filter(c => cardStatus[c.id]==='known').length;
+  const unknown = cards.filter(c => cardStatus[c.id]==='unknown').length;
+  document.getElementById('fcStats').innerHTML =
+    `<span>মোট: <strong>${total}</strong></span>
+     <span style="color:var(--teal);">✅ জানা: <strong>${known}</strong></span>
+     <span style="color:var(--accent);">❌ অজানা: <strong>${unknown}</strong></span>
+     <span style="color:var(--muted);">⬜ দেখিনি: <strong>${total-known-unknown}</strong></span>`;
+}
+
+loadStatus();
+applyFilter();
+</script>
+</body>
+</html>
