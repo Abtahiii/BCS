@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BCS প্রস্তুতি — আন্তর্জাতিক বিষয়াবলি</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink2: #2d2d4a;
+    --paper: #f8f6f0;
+    --paper2: #efe9dc;
+    --accent: #c0392b;
+    --accent2: #e74c3c;
+    --gold: #d4a017;
+    --gold2: #f0c040;
+    --teal: #0e6655;
+    --teal2: #1abc9c;
+    --muted: #6b6b8a;
+    --border: rgba(26,26,46,0.12);
+    --shadow: 0 4px 24px rgba(26,26,46,0.10);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Hind Siliguri', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--gold);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+  .logo {
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.02em;
+  }
+  .logo span { color: var(--gold); }
+  nav { display: flex; gap: 4px; }
+  .nav-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.65);
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.9rem;
+    padding: 8px 14px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    background: rgba(212,160,23,0.18);
+    color: var(--gold2);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--ink2);
+    color: #fff;
+    padding: 3rem 1.5rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(212,160,23,0.03) 40px,
+      rgba(212,160,23,0.03) 41px
+    );
+  }
+  .hero-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero p {
+    color: rgba(255,255,255,0.65);
+    font-size: 1rem;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  .stat { text-align: center; }
+  .stat-n {
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--gold);
+    display: block;
+  }
+  .stat-l { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+
+  /* ── TABS ── */
+  .tab-bar {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    display: flex;
+    max-width: 1100px;
+    margin: 0 auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab {
+    background: none;
+    border: none;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.92rem;
+    color: var(--muted);
+    padding: 14px 18px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.18s;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+
+  /* ── PAGE SECTIONS ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── QUESTION BANK ── */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  .count-badge {
+    font-size: 0.8rem;
+    background: var(--ink);
+    color: var(--gold);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+
+  .filter-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+  .filter-chip {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.82rem;
+    color: var(--muted);
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .filter-chip:hover { border-color: var(--ink); color: var(--ink); }
+  .filter-chip.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .q-grid { display: flex; flex-direction: column; gap: 14px; }
+
+  .q-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    transition: all 0.2s;
+    animation: fadeIn 0.3s ease;
+  }
+  .q-card:hover {
+    border-color: rgba(26,26,46,0.25);
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+  }
+  .q-card.hidden { display: none; }
+
+  .q-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .q-num {
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: var(--paper2);
+    color: var(--muted);
+    padding: 3px 9px;
+    border-radius: 8px;
+    letter-spacing: 0.05em;
+  }
+  .q-topic-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 8px;
+  }
+  .q-text {
+    font-size: 0.97rem;
+    line-height: 1.75;
+    color: var(--ink);
+    margin-bottom: 1rem;
+  }
+  .q-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-ai {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-ai:hover { background: var(--accent2); transform: translateY(-1px); }
+  .btn-ai:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .btn-note {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--muted);
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.82rem;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .btn-note:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* AI Answer Panel */
+  .ai-panel {
+    margin-top: 1rem;
+    background: linear-gradient(135deg, #f0f8f5 0%, #e8f4f0 100%);
+    border: 1px solid rgba(14,102,85,0.2);
+    border-radius: 10px;
+    padding: 1.25rem;
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .ai-panel.show { display: block; }
+  .ai-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.75rem;
+  }
+  .ai-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--teal);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .ai-dot {
+    width: 8px; height: 8px;
+    background: var(--teal2);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(0.8)} }
+  .ai-answer {
+    font-size: 0.93rem;
+    line-height: 1.85;
+    color: var(--ink);
+    white-space: pre-wrap;
+  }
+
+  /* API Key Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .modal-overlay.hidden { display: none; }
+  .modal {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 460px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  }
+  .modal h2 {
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+  .modal p { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.6; }
+  .modal input {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    outline: none;
+    transition: border-color 0.18s;
+  }
+  .modal input:focus { border-color: var(--teal); }
+  .modal-actions { display: flex; gap: 10px; }
+  .btn-save {
+    flex: 1;
+    background: var(--ink);
+    color: var(--gold);
+    border: none;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.18s;
+  }
+  .btn-save:hover { opacity: 0.88; }
+  .btn-cancel {
+    background: var(--paper2);
+    color: var(--muted);
+    border: none;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.9rem;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  /* ── STUDY GUIDE ── */
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+  .guide-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .guide-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+  .guide-card-top {
+    padding: 1.25rem 1.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .guide-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+  .guide-card h3 {
+    font-family: 'Noto Serif Bengali', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .guide-card p { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+  .guide-card-bottom {
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .q-count-sm { font-size: 0.78rem; color: var(--muted); }
+  .arrow-link { font-size: 1rem; color: var(--accent); }
+
+  /* Guide Detail */
+  .guide-detail { display: none; }
+  .guide-detail.show { display: block; }
+  .guide-list-view { display: block; }
+  .guide-list-view.hide { display: none; }
+
+  .back-btn {
+    background: none;
+    border: none;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.88rem;
+    color: var(--muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+    padding: 0;
+  }
+  .back-btn:hover { color: var(--ink); }
+
+  .note-editor {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+  }
+  .note-editor textarea {
+    width: 100%;
+    min-height: 120px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    resize: vertical;
+    outline: none;
+    color: var(--ink);
+  }
+  .note-editor textarea:focus { border-color: var(--teal); }
+  .save-note-btn {
+    margin-top: 10px;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .saved-notes { margin-top: 1.25rem; }
+  .saved-note-item {
+    background: var(--paper);
+    border-left: 3px solid var(--teal);
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 10px;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    position: relative;
+  }
+  .note-del {
+    position: absolute;
+    top: 8px; right: 10px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+  .note-del:hover { color: var(--accent); }
+
+  /* ── AI CHAT PAGE ── */
+  .ai-page-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .api-status-bar {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #ccc;
+    margin-right: 8px;
+    display: inline-block;
+  }
+  .status-dot.connected { background: var(--teal2); }
+  .status-text { font-size: 0.83rem; color: var(--muted); }
+  .change-key-btn {
+    background: none;
+    border: 1px solid var(--border);
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.78rem;
+    color: var(--muted);
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .change-key-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+  .chat-box {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    min-height: 380px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .chat-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    text-align: center;
+    padding: 2rem;
+  }
+  .chat-empty-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .chat-msg {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    animation: fadeIn 0.25s ease;
+  }
+  .chat-msg.user { align-items: flex-end; }
+  .chat-msg.bot { align-items: flex-start; }
+  .chat-bubble {
+    max-width: 82%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 0.9rem;
+    line-height: 1.75;
+    white-space: pre-wrap;
+  }
+  .user .chat-bubble {
+    background: var(--ink);
+    color: var(--gold2);
+    border-radius: 14px 14px 4px 14px;
+  }
+  .bot .chat-bubble {
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 14px 14px 14px 4px;
+    border: 1px solid var(--border);
+  }
+  .chat-time { font-size: 0.7rem; color: var(--muted); }
+
+  .chat-input-row {
+    display: flex;
+    gap: 10px;
+  }
+  .chat-input {
+    flex: 1;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.18s;
+    resize: none;
+    height: 48px;
+    line-height: 1.6;
+  }
+  .chat-input:focus { border-color: var(--teal); }
+  .send-btn {
+    background: var(--ink);
+    color: var(--gold);
+    border: none;
+    border-radius: 10px;
+    padding: 0 20px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .send-btn:hover { background: var(--accent); }
+  .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .quick-prompts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1rem;
+  }
+  .qp-chip {
+    background: var(--paper2);
+    border: none;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.78rem;
+    color: var(--ink2);
+    padding: 6px 12px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .qp-chip:hover { background: var(--ink); color: var(--gold); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color: var(--gold);
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 999;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── UTILS ── */
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  /* Color tags for topics */
+  .tag-conflict { background: #fde8e8; color: #991b1b; }
+  .tag-geo      { background: #ede9fe; color: #5b21b6; }
+  .tag-regional { background: #d1fae5; color: #065f46; }
+  .tag-economy  { background: #fef3c7; color: #92400e; }
+  .tag-climate  { background: #dcfce7; color: #166534; }
+  .tag-tech     { background: #dbeafe; color: #1e40af; }
+
+  .empty-state {
+    text-align: center;
+    color: var(--muted);
+    padding: 3rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 1.6rem; }
+    .hero-stats { gap: 1.5rem; }
+    .stat-n { font-size: 1.4rem; }
+    .tab { font-size: 0.82rem; padding: 12px 12px; }
+    .q-card { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- API Key Modal -->
+<div class="modal-overlay" id="apiModal">
+  <div class="modal">
+    <h2>🔑 API Key সেটআপ</h2>
+    <p>তোমার Anthropic API key দাও। এটি শুধু তোমার browser-এ সংরক্ষিত থাকবে, কোথাও পাঠানো হবে না।<br><br>
+    API key পেতে যাও: <strong>console.anthropic.com</strong></p>
+    <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." />
+    <div class="modal-actions">
+      <button class="btn-save" onclick="saveApiKey()">সংরক্ষণ করো</button>
+      <button class="btn-cancel" onclick="closeModal()">পরে করব</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Header -->
+<header>
+  <div class="header-inner">
+    <div class="logo">BCS <span>প্রস্তুতি</span></div>
+    <nav>
+      <button class="nav-btn active" onclick="showPage('bank')">প্রশ্নব্যাংক</button>
+      <button class="nav-btn" onclick="showPage('guide')">স্টাডি গাইড</button>
+      <button class="nav-btn" onclick="showPage('ai')">AI সহায়তা</button>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-tag">আন্তর্জাতিক বিষয়াবলি</div>
+  <h1>BCS পরীক্ষার <span>সম্পূর্ণ প্রস্তুতি</span></h1>
+  <p>প্রশ্নব্যাংক, AI-চালিত ব্যাখ্যা, এবং স্মার্ট স্টাডি গাইড — একটি জায়গায়</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-n">১৬</span><span class="stat-l">প্রশ্ন</span></div>
+    <div class="stat"><span class="stat-n">৬</span><span class="stat-l">টপিক</span></div>
+    <div class="stat"><span class="stat-n">AI</span><span class="stat-l">ব্যাখ্যা</span></div>
+  </div>
+</div>
+
+<!-- Tab bar (for question bank filter on bank page) -->
+<div style="background:#fff; border-bottom: 1px solid var(--border);">
+  <div class="tab-bar" id="topicTabBar">
+    <button class="tab active" onclick="filterByTopic('all', this)">সব প্রশ্ন</button>
+    <button class="tab" onclick="filterByTopic('conflict', this)">সংঘাত ও যুদ্ধ</button>
+    <button class="tab" onclick="filterByTopic('geo', this)">ভূরাজনীতি</button>
+    <button class="tab" onclick="filterByTopic('regional', this)">আঞ্চলিক সহযোগিতা</button>
+    <button class="tab" onclick="filterByTopic('economy', this)">বৈশ্বিক অর্থনীতি</button>
+    <button class="tab" onclick="filterByTopic('climate', this)">জলবায়ু ও পরিবেশ</button>
+    <button class="tab" onclick="filterByTopic('tech', this)">প্রযুক্তি</button>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+
+  <!-- PAGE: Question Bank -->
+  <div class="page active" id="page-bank">
+    <div class="section-header">
+      <div class="section-title">প্রশ্নব্যাংক</div>
+      <span class="count-badge" id="qCount">১৬টি প্রশ্ন</span>
+    </div>
+    <div class="q-grid" id="questionGrid"></div>
+  </div>
+
+  <!-- PAGE: Study Guide -->
+  <div class="page" id="page-guide">
+    <div class="guide-list-view" id="guideListView">
+      <div class="section-header">
+        <div class="section-title">স্টাডি গাইড</div>
+      </div>
+      <div class="guide-grid" id="guideGrid"></div>
+    </div>
+    <div class="guide-detail" id="guideDetail">
+      <button class="back-btn" onclick="closeGuideDetail()">← গাইড তালিকায় ফিরে যাও</button>
+      <div id="guideDetailContent"></div>
+    </div>
+  </div>
+
+  <!-- PAGE: AI Chat -->
+  <div class="page" id="page-ai">
+    <div class="ai-page-wrap">
+      <div class="api-status-bar">
+        <div style="display:flex;align-items:center;">
+          <span class="status-dot" id="statusDot"></span>
+          <span class="status-text" id="statusText">API key সংযুক্ত নেই</span>
+        </div>
+        <button class="change-key-btn" onclick="openModal()">Key পরিবর্তন</button>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title">AI সহায়তা</div>
+      </div>
+
+      <div class="quick-prompts">
+        <button class="qp-chip" onclick="setPrompt('রোহিঙ্গা সংকটের মূল কারণ ব্যাখ্যা করো')">রোহিঙ্গা সংকট</button>
+        <button class="qp-chip" onclick="setPrompt('ডি-ডলারাইজেশন কী এবং বাংলাদেশে এর প্রভাব কী?')">ডি-ডলারাইজেশন</button>
+        <button class="qp-chip" onclick="setPrompt('সার্ক কেন ব্যর্থ হচ্ছে? বিস্তারিত বলো')">সার্কের ব্যর্থতা</button>
+        <button class="qp-chip" onclick="setPrompt('বঙ্গোপসাগরের ভূরাজনৈতিক গুরুত্ব ব্যাখ্যা করো')">বঙ্গোপসাগর</button>
+        <button class="qp-chip" onclick="setPrompt('ফিলিস্তিন-ইসরায়েল সংকটে মুসলিম বিশ্বের অবস্থান কী?')">ফিলিস্তিন সংকট</button>
+        <button class="qp-chip" onclick="setPrompt('BCS লিখিত পরীক্ষায় আন্তর্জাতিক বিষয়াবলিতে ভালো করার টিপস দাও')">পরীক্ষার টিপস</button>
+      </div>
+
+      <div class="chat-box" id="chatBox">
+        <div class="chat-empty" id="chatEmpty">
+          <div class="chat-empty-icon">🤖</div>
+          <strong>AI সহায়ক প্রস্তুত</strong>
+          <p>যেকোনো BCS প্রশ্ন করো বা উপরের shortcut ব্যবহার করো</p>
+        </div>
+      </div>
+
+      <div class="chat-input-row">
+        <textarea class="chat-input" id="chatInput" placeholder="প্রশ্ন লিখুন... (Enter চাপলে পাঠানো হবে)" onkeydown="handleEnter(event)"></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendChat()">↑</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ═══════════════════════════════
+// DATA
+// ═══════════════════════════════
+const QUESTIONS = [
+  {
+    id: 1, num: "প্র-১", topic: "conflict",
+    topicLabel: "সংঘাত ও যুদ্ধ",
+    text: "ইরান-ইসরায়েল দ্বন্দ্বের ঐতিহাসিক শিকড় ও বর্তমান পরিস্থিতি বিশ্লেষণ করুন। এই সংকট মধ্যপ্রাচ্যের ভূরাজনীতি এবং বাংলাদেশের কূটনীতিতে কী ধরনের প্রভাব ফেলছে?"
+  },
+  {
+    id: 2, num: "প্র-২", topic: "geo",
+    topicLabel: "ভূরাজনীতি",
+    text: "গ্রিনল্যান্ডকে কেন্দ্র করে যুক্তরাষ্ট্র-ডেনমার্ক উত্তেজনার প্রেক্ষাপট ব্যাখ্যা করুন। আর্কটিক অঞ্চলের ভূরাজনৈতিক গুরুত্ব ও ভবিষ্যৎ পরিণতি আলোচনা করুন।"
+  },
+  {
+    id: 3, num: "প্র-৩", topic: "economy",
+    topicLabel: "বৈশ্বিক অর্থনীতি",
+    text: "ভেনেজুয়েলার রাজনৈতিক ও অর্থনৈতিক সংকটের মূল কারণ কী? সাম্রাজ্যবাদ এবং সম্পদ-রাজনীতির আলোকে পরিস্থিতি বিশ্লেষণ করুন।"
+  },
+  {
+    id: 4, num: "প্র-৪", topic: "regional",
+    topicLabel: "আঞ্চলিক সহযোগিতা",
+    text: "সার্কের কার্যকারিতা ও ভবিষ্যৎ নিয়ে বিতর্ক পর্যালোচনা করুন। ভারত-পাকিস্তান দ্বন্দ্ব সার্ককে কীভাবে অকার্যকর করে তুলেছে এবং আঞ্চলিক সহযোগিতার বিকল্প কাঠামো কী হতে পারে?"
+  },
+  {
+    id: 5, num: "প্র-৫", topic: "conflict",
+    topicLabel: "সংঘাত ও যুদ্ধ",
+    text: "ফিলিস্তিন-ইসরায়েল সংকট সমাধানে আন্তর্জাতিক সম্প্রদায়ের ব্যর্থতার কারণ বিশ্লেষণ করুন। মুসলিম বিশ্বের অবস্থান এবং বাংলাদেশের কূটনৈতিক ভূমিকা নিয়ে আলোচনা করুন।"
+  },
+  {
+    id: 6, num: "প্র-৬", topic: "conflict",
+    topicLabel: "সংঘাত ও যুদ্ধ",
+    text: "রোহিঙ্গা সংকট সমাধানে 'মর্যাদাপূর্ণ ও স্বেচ্ছা প্রত্যাবাসন' নিশ্চিত করতে কার্যকর আন্তর্জাতিক চাপ তৈরির পথে প্রধান প্রতিবন্ধকতাগুলো চিহ্নিত করুন এবং কূটনৈতিক সমাধানের পথ বাতলান।"
+  },
+  {
+    id: 7, num: "প্র-৭", topic: "economy",
+    topicLabel: "বৈশ্বিক অর্থনীতি",
+    text: "শাটডাউন ইকোনমি ও 'ডি-ডলারাইজেশন'-এর ধারণা ব্যাখ্যা করুন। মার্কিন অর্থনৈতিক কূটনীতির বিকল্প হিসেবে বৈশ্বিক আর্থিক ব্যবস্থা কীভাবে পুনর্গঠিত হচ্ছে?"
+  },
+  {
+    id: 8, num: "প্র-৮", topic: "conflict",
+    topicLabel: "সংঘাত ও যুদ্ধ",
+    text: "ইউক্রেন-রাশিয়া যুদ্ধ কি শিগগির সমাপ্তির দিকে যাচ্ছে? 'কোয়ালিশন অব দ্য উইলিং'-এর ভূমিকা ও যুদ্ধের সম্ভাব্য পরিণতি বিশ্লেষণ করুন।"
+  },
+  {
+    id: 9, num: "প্র-৯", topic: "geo",
+    topicLabel: "ভূরাজনীতি",
+    text: "বঙ্গোপসাগরের কৌশলগত গুরুত্ব ও এখানে মহাশক্তিগুলোর প্রতিযোগিতার স্বরূপ বিশ্লেষণ করুন। বাংলাদেশ কীভাবে এই সুযোগকে কাজে লাগাতে পারে?"
+  },
+  {
+    id: 10, num: "প্র-১০", topic: "regional",
+    topicLabel: "আঞ্চলিক সহযোগিতা",
+    text: "মধ্যম শক্তিধর দেশগুলোর (Middle Powers) সংহতি কি বর্তমান বৈশ্বিক অরাজকতা মোকাবেলায় কার্যকর বিকল্প হতে পারে? বাংলাদেশ এই জোটে কীভাবে ভূমিকা রাখতে পারে?"
+  },
+  {
+    id: 11, num: "প্র-১১", topic: "economy",
+    topicLabel: "বৈশ্বিক অর্থনীতি",
+    text: "বৈশ্বিক সাপ্লাই চেইন পুনর্বিন্যাসের (Supply Chain Realignment) সুযোগ কাজে লাগাতে বাংলাদেশের প্রস্তুতি পর্যালোচনা করুন। বিনিয়োগ পরিবেশ, অবকাঠামো ও দক্ষতার প্রেক্ষাপটে আলোচনা করুন।"
+  },
+  {
+    id: 12, num: "প্র-১২", topic: "climate",
+    topicLabel: "জলবায়ু ও পরিবেশ",
+    text: "ইউরোপের প্রতিরক্ষা ব্যয় বৃদ্ধি ও পরিবেশ-বিনিয়োগ হ্রাসের মধ্যে দ্বন্দ্ব আন্তর্জাতিক জলবায়ু রাজনীতিতে কী প্রভাব ফেলছে?"
+  },
+  {
+    id: 13, num: "প্র-১৩", topic: "geo",
+    topicLabel: "ভূরাজনীতি",
+    text: "ইরান ও ভেনেজুয়েলায় মার্কিন হস্তক্ষেপ আন্তর্জাতিক আইনের 'অ-হস্তক্ষেপ নীতি'কে দুর্বল করছে — এটি বাংলাদেশসহ দক্ষিণ এশিয়ার দেশগুলোর সার্বভৌমত্বের জন্য কোন বার্তা দেয়?"
+  },
+  {
+    id: 14, num: "প্র-১৪ক", topic: "tech",
+    topicLabel: "প্রযুক্তি",
+    text: "চ্যাটবট ও বড় ভাষামডেলগুলো (LLM) কোন মতাদর্শ প্রচারে ব্যবহৃত হচ্ছে? তথ্যপ্রবাহ ও ডিজিটাল সার্বভৌমত্ব (Digital Sovereignty) রক্ষায় বাংলাদেশের নীতিকাঠামো কেমন হওয়া উচিত?"
+  },
+  {
+    id: 15, num: "প্র-১৪খ", topic: "tech",
+    topicLabel: "প্রযুক্তি",
+    text: "মার্কিন-চীন প্রযুক্তি-প্রতিযোগিতার মাঝে উন্নয়নশীল দেশগুলোর জন্য 'প্রযুক্তিগত নিরপেক্ষতা' কি সম্ভব, নাকি তারা কোনো না কোনো শিবিরে যোগ দিতে বাধ্য হবে?"
+  },
+  {
+    id: 16, num: "প্র-১৫", topic: "climate",
+    topicLabel: "জলবায়ু ও পরিবেশ",
+    text: "আফ্রিকার দেশগুলো কেন পশ্চিমা জলবায়ু অর্থায়নের বিকল্প হিসেবে নিজস্ব সবুজ অর্থায়ন-কাঠামো গড়ে তুলছে? বাংলাদেশ এই মডেল থেকে কী শিক্ষা নিতে পারে?"
+  },
+  {
+    id: 17, num: "প্র-১৬", topic: "climate",
+    topicLabel: "জলবায়ু ও পরিবেশ",
+    text: "জলবায়ু পরিবর্তন, ভূরাজনৈতিক সংঘাত এবং খাদ্য নিরাপত্তার আন্তঃসংযোগ (Nexus) ব্যাখ্যা করুন। বাংলাদেশের খাদ্য-কৌশলে এই তিনটি মাত্রার সমন্বয় কীভাবে সম্ভব?"
+  }
+];
+
+const GUIDES = [
+  {
+    id: "conflict", title: "আঞ্চলিক সংঘাত ও যুদ্ধ", icon: "⚔️",
+    color: "#fde8e8", iconColor: "#991b1b",
+    desc: "ইরান-ইসরায়েল, ফিলিস্তিন, ইউক্রেন-রাশিয়া, রোহিঙ্গা সংকট",
+    keyPoints: [
+      "ইরান-ইসরায়েল: ১৯৭৯ সালের পর থেকে আদর্শিক ও কৌশলগত দ্বন্দ্ব",
+      "ফিলিস্তিন: দ্বি-রাষ্ট্র সমাধান ব্যর্থতার কারণ — UNSC ভেটো, Oslo চুক্তির সীমাবদ্ধতা",
+      "ইউক্রেন: NATO সম্প্রসারণ vs রাশিয়ার নিরাপত্তা উদ্বেগ",
+      "রোহিঙ্গা: মিয়ানমারের সামরিক শাসন, China-এর ভেটো, ASEAN-এর নীরবতা",
+      "বাংলাদেশের অবস্থান: ইসলামিক সংহতি + নিরপেক্ষ কূটনীতির ভারসাম্য"
+    ]
+  },
+  {
+    id: "geo", title: "ভূরাজনীতি ও কৌশলগত প্রতিযোগিতা", icon: "🌏",
+    color: "#ede9fe", iconColor: "#5b21b6",
+    desc: "আর্কটিক, বঙ্গোপসাগর, সার্বভৌমত্ব ও অ-হস্তক্ষেপ নীতি",
+    keyPoints: [
+      "গ্রিনল্যান্ড: আর্কটিক সম্পদ + উত্তর-পশ্চিম পথ = কৌশলগত মহামূল্য",
+      "বঙ্গোপসাগর: Indo-Pacific কৌশলে Quad ও China-এর প্রতিযোগিতা",
+      "অ-হস্তক্ষেপ নীতি: UN Charter অনুচ্ছেদ ২(৭) — মার্কিন প্রক্সি হস্তক্ষেপে দুর্বল",
+      "বাংলাদেশের সুযোগ: maritime economy, blue economy, port diplomacy",
+      "China's String of Pearls vs India's Necklace of Diamonds"
+    ]
+  },
+  {
+    id: "regional", title: "আঞ্চলিক সংগঠন ও সহযোগিতা", icon: "🤝",
+    color: "#d1fae5", iconColor: "#065f46",
+    desc: "সার্ক, BIMSTEC, মধ্যম শক্তিধর দেশ",
+    keyPoints: [
+      "সার্ক ব্যর্থতার কারণ: ভারত-পাকিস্তান দ্বন্দ্ব, consensus rule, রাজনৈতিক সদিচ্ছার অভাব",
+      "BIMSTEC: ৭ দেশ, Bay of Bengal কেন্দ্রিক, সার্কের বিকল্প হিসেবে সম্ভাবনা",
+      "Middle Powers: অস্ট্রেলিয়া, কানাডা, দক্ষিণ কোরিয়া, তুরস্ক, বাংলাদেশ",
+      "বাংলাদেশের শক্তি: জনমিতিক লভ্যাংশ, পোশাক শিল্প, শান্তিরক্ষা অভিজ্ঞতা",
+      "G-20, CHOGM, D-8 ইসলামিক দেশগুলোর জোট"
+    ]
+  },
+  {
+    id: "economy", title: "বৈশ্বিক অর্থনীতি ও বাণিজ্য", icon: "📊",
+    color: "#fef3c7", iconColor: "#92400e",
+    desc: "ডি-ডলারাইজেশন, সাপ্লাই চেইন, ভেনেজুয়েলা সংকট",
+    keyPoints: [
+      "ডি-ডলারাইজেশন: BRICS মুদ্রা, চীন-রাশিয়া বাণিজ্য, petrodollar হুমকি",
+      "Shutdown Economy: নিষেধাজ্ঞা-ভিত্তিক কূটনীতির হাতিয়ার",
+      "ভেনেজুয়েলা: তেল-নির্ভর অর্থনীতি + মার্কিন নিষেধাজ্ঞা = পতন",
+      "Supply Chain: China+1 কৌশলে বাংলাদেশের সুযোগ — বিদ্যুৎ সংকট, দক্ষতার ঘাটতি চ্যালেঞ্জ",
+      "WTO সংস্কার প্রয়োজন, আঞ্চলিক FTA-র গুরুত্ব"
+    ]
+  },
+  {
+    id: "climate", title: "জলবায়ু, পরিবেশ ও খাদ্য নিরাপত্তা", icon: "🌱",
+    color: "#dcfce7", iconColor: "#166534",
+    desc: "Climate Finance, Food Security Nexus, সবুজ অর্থায়ন",
+    keyPoints: [
+      "Paris Agreement: $100 billion/year প্রতিশ্রুতি — এখনো পূরণ হয়নি",
+      "ইউরোপীয় প্রতিরক্ষা বৃদ্ধি: Green Deal তহবিল সংকুচিত, COP লক্ষ্যমাত্রা হুমকিতে",
+      "আফ্রিকা মডেল: নিজস্ব Green Climate Fund, debt-for-nature swap",
+      "Climate-Food Nexus: সংঘাত → supply chain ভাঙন → খাদ্য মূল্যবৃদ্ধি",
+      "বাংলাদেশ: BCCSAP, Mujib Climate Prosperity Plan, ভাসমান সোলার প্যানেল"
+    ]
+  },
+  {
+    id: "tech", title: "প্রযুক্তি ও ডিজিটাল সার্বভৌমত্ব", icon: "💻",
+    color: "#dbeafe", iconColor: "#1e40af",
+    desc: "AI মতাদর্শ, মার্কিন-চীন Tech War, Digital Sovereignty",
+    keyPoints: [
+      "LLM মতাদর্শ: training data-র পশ্চিমা পক্ষপাত, censorship ও narrative নিয়ন্ত্রণ",
+      "Digital Sovereignty: ডেটা স্থানীয়করণ, national AI নীতি",
+      "Tech Decoupling: Huawei নিষেধাজ্ঞা, chip war, TSMC ভূমিকা",
+      "উন্নয়নশীল দেশের সমস্যা: প্রযুক্তি কিনতে হয় কোনো না কোনো শিবির থেকে",
+      "বাংলাদেশের প্রয়োজন: AI নীতি, সাইবার আইন, digital infrastructure"
+    ]
+  }
+];
+
+// ═══════════════════════════════
+// STATE
+// ═══════════════════════════════
+let apiKey = localStorage.getItem('bcs_api_key') || '';
+let currentFilter = 'all';
+let notes = JSON.parse(localStorage.getItem('bcs_notes') || '{}');
+let chatHistory = [];
+
+// ═══════════════════════════════
+// INIT
+// ═══════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  renderQuestions();
+  renderGuides();
+  updateApiStatus();
+  if (!apiKey) openModal();
+});
+
+// ═══════════════════════════════
+// API KEY
+// ═══════════════════════════════
+function openModal() {
+  document.getElementById('apiModal').classList.remove('hidden');
+  document.getElementById('apiKeyInput').value = apiKey;
+}
+function closeModal() {
+  document.getElementById('apiModal').classList.add('hidden');
+}
+function saveApiKey() {
+  const k = document.getElementById('apiKeyInput').value.trim();
+  if (!k || !k.startsWith('sk-')) {
+    showToast('সঠিক API key দাও (sk- দিয়ে শুরু)');
+    return;
+  }
+  apiKey = k;
+  localStorage.setItem('bcs_api_key', k);
+  closeModal();
+  updateApiStatus();
+  showToast('✓ API key সংরক্ষিত হয়েছে');
+}
+function updateApiStatus() {
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusText');
+  if (apiKey) {
+    dot.classList.add('connected');
+    txt.textContent = 'API সংযুক্ত — AI উত্তর পাওয়া যাবে';
+  } else {
+    dot.classList.remove('connected');
+    txt.textContent = 'API key সংযুক্ত নেই';
+  }
+}
+
+// ═══════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  event.target.classList.add('active');
+
+  const tabBar = document.getElementById('topicTabBar').parentElement;
+  tabBar.style.display = (name === 'bank') ? 'block' : 'none';
+}
+
+// ═══════════════════════════════
+// QUESTION BANK
+// ═══════════════════════════════
+function renderQuestions() {
+  const grid = document.getElementById('questionGrid');
+  const filtered = currentFilter === 'all'
+    ? QUESTIONS
+    : QUESTIONS.filter(q => q.topic === currentFilter);
+
+  document.getElementById('qCount').textContent = filtered.length + 'টি প্রশ্ন';
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty-state">এই টপিকে কোনো প্রশ্ন নেই</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(q => `
+    <div class="q-card" id="qcard-${q.id}">
+      <div class="q-meta">
+        <span class="q-num">${q.num}</span>
+        <span class="q-topic-tag tag-${q.topic}">${q.topicLabel}</span>
+      </div>
+      <div class="q-text">${q.text}</div>
+      <div class="q-actions">
+        <button class="btn-ai" onclick="getAiAnswer(${q.id}, this)">
+          ✦ AI ব্যাখ্যা নাও
+        </button>
+        <button class="btn-note" onclick="toggleNote(${q.id})">
+          📝 নোট
+        </button>
+      </div>
+      <div class="ai-panel" id="ai-${q.id}">
+        <div class="ai-panel-header">
+          <div class="ai-dot" id="dot-${q.id}"></div>
+          <span class="ai-label">AI উত্তর</span>
+        </div>
+        <div class="ai-answer" id="ans-${q.id}"></div>
+      </div>
+      <div id="note-area-${q.id}" style="display:none;margin-top:1rem;">
+        <textarea style="width:100%;min-height:90px;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'Hind Siliguri',sans-serif;font-size:0.88rem;outline:none;resize:vertical;" placeholder="এই প্রশ্নের জন্য নোট লিখুন..." id="noteInput-${q.id}">${notes[q.id] || ''}</textarea>
+        <button style="margin-top:6px;background:var(--teal);color:#fff;border:none;padding:7px 18px;border-radius:7px;font-family:'Hind Siliguri',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;" onclick="saveNote(${q.id})">সংরক্ষণ করো</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterByTopic(topic, el) {
+  currentFilter = topic;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderQuestions();
+}
+
+async function getAiAnswer(id, btn) {
+  if (!apiKey) { openModal(); return; }
+  const q = QUESTIONS.find(x => x.id === id);
+  const panel = document.getElementById('ai-' + id);
+  const ans = document.getElementById('ans-' + id);
+  const dot = document.getElementById('dot-' + id);
+
+  panel.classList.add('show');
+  btn.disabled = true;
+  btn.textContent = '⏳ উত্তর তৈরি হচ্ছে...';
+  ans.textContent = '';
+  dot.style.display = 'block';
+
+  const systemPrompt = `তুমি একজন BCS পরীক্ষার বিশেষজ্ঞ। আন্তর্জাতিক বিষয়াবলিতে তোমার গভীর জ্ঞান আছে। 
+উত্তর বাংলায় দাও। উত্তর কাঠামোগত হবে: সংক্ষিপ্ত ভূমিকা, মূল বিশ্লেষণ (বিন্দু আকারে), এবং উপসংহার। 
+BCS লিখিত পরীক্ষার জন্য উপযুক্ত মানের উত্তর দাও। সর্বোচ্চ ৪০০ শব্দ।`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: q.text }]
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error?.message || 'API error');
+    }
+
+    const data = await res.json();
+    ans.textContent = data.content[0].text;
+  } catch (e) {
+    ans.textContent = '❌ ত্রুটি: ' + e.message + '\n\nAPI key সঠিক আছে কিনা দেখো।';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '✦ AI ব্যাখ্যা নাও';
+    dot.style.display = 'none';
+  }
+}
+
+function toggleNote(id) {
+  const area = document.getElementById('note-area-' + id);
+  area.style.display = area.style.display === 'none' ? 'block' : 'none';
+}
+
+function saveNote(id) {
+  const val = document.getElementById('noteInput-' + id).value;
+  notes[id] = val;
+  localStorage.setItem('bcs_notes', JSON.stringify(notes));
+  showToast('✓ নোট সংরক্ষিত হয়েছে');
+}
+
+// ═══════════════════════════════
+// STUDY GUIDE
+// ═══════════════════════════════
+function renderGuides() {
+  const grid = document.getElementById('guideGrid');
+  const qCountByTopic = {};
+  QUESTIONS.forEach(q => {
+    qCountByTopic[q.topic] = (qCountByTopic[q.topic] || 0) + 1;
+  });
+
+  grid.innerHTML = GUIDES.map(g => `
+    <div class="guide-card" onclick="openGuide('${g.id}')">
+      <div class="guide-card-top">
+        <div class="guide-icon" style="background:${g.color};">
+          <span style="font-size:1.1rem;">${g.icon}</span>
+        </div>
+        <h3>${g.title}</h3>
+        <p>${g.desc}</p>
+      </div>
+      <div class="guide-card-bottom">
+        <span class="q-count-sm">${qCountByTopic[g.id] || 0}টি প্রশ্ন</span>
+        <span class="arrow-link">→</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openGuide(id) {
+  const g = GUIDES.find(x => x.id === id);
+  const relatedQs = QUESTIONS.filter(q => q.topic === id);
+  const savedNote = notes['guide_' + id] || '';
+
+  document.getElementById('guideDetailContent').innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
+      <div style="width:44px;height:44px;border-radius:10px;background:${g.color};display:flex;align-items:center;justify-content:center;font-size:1.4rem;">${g.icon}</div>
+      <div>
+        <h2 style="font-family:'Noto Serif Bengali',serif;font-size:1.4rem;">${g.title}</h2>
+        <p style="font-size:0.83rem;color:var(--muted);">${relatedQs.length}টি প্রশ্ন</p>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem;">
+      <h3 style="font-family:'Noto Serif Bengali',serif;font-size:1rem;margin-bottom:1rem;">📌 মূল পয়েন্ট</h3>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+        ${g.keyPoints.map(p => `
+          <li style="display:flex;gap:10px;font-size:0.9rem;line-height:1.7;">
+            <span style="color:var(--accent);font-weight:700;flex-shrink:0;">▸</span>
+            <span>${p}</span>
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.25rem;">
+      <h3 style="font-family:'Noto Serif Bengali',serif;font-size:1rem;margin-bottom:1rem;">❓ সম্পর্কিত প্রশ্নসমূহ</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        ${relatedQs.map(q => `
+          <div style="background:var(--paper);border-radius:8px;padding:10px 14px;font-size:0.88rem;line-height:1.7;">
+            <strong style="color:var(--muted);font-size:0.75rem;">${q.num}</strong><br>
+            ${q.text}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.5rem;">
+      <h3 style="font-family:'Noto Serif Bengali',serif;font-size:1rem;margin-bottom:1rem;">📝 আমার নোট</h3>
+      <textarea id="guideNote-${id}" style="width:100%;min-height:120px;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'Hind Siliguri',sans-serif;font-size:0.9rem;line-height:1.7;resize:vertical;outline:none;" placeholder="এই টপিকে নিজের নোট লিখুন...">${savedNote}</textarea>
+      <button onclick="saveGuideNote('${id}')" style="margin-top:8px;background:var(--teal);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-family:'Hind Siliguri',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;">সংরক্ষণ করো</button>
+    </div>
+  `;
+
+  document.getElementById('guideListView').classList.add('hide');
+  document.getElementById('guideDetail').classList.add('show');
+}
+
+function closeGuideDetail() {
+  document.getElementById('guideListView').classList.remove('hide');
+  document.getElementById('guideDetail').classList.remove('show');
+}
+
+function saveGuideNote(id) {
+  const val = document.getElementById('guideNote-' + id).value;
+  notes['guide_' + id] = val;
+  localStorage.setItem('bcs_notes', JSON.stringify(notes));
+  showToast('✓ নোট সংরক্ষিত হয়েছে');
+}
+
+// ═══════════════════════════════
+// AI CHAT
+// ═══════════════════════════════
+function setPrompt(text) {
+  document.getElementById('chatInput').value = text;
+  document.getElementById('chatInput').focus();
+}
+
+function handleEnter(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChat();
+  }
+}
+
+async function sendChat() {
+  if (!apiKey) { openModal(); return; }
+  const inp = document.getElementById('chatInput');
+  const msg = inp.value.trim();
+  if (!msg) return;
+
+  inp.value = '';
+  const chatBox = document.getElementById('chatBox');
+  const empty = document.getElementById('chatEmpty');
+  if (empty) empty.remove();
+
+  appendMsg('user', msg);
+  chatHistory.push({ role: 'user', content: msg });
+
+  const sendBtn = document.getElementById('sendBtn');
+  sendBtn.disabled = true;
+  sendBtn.textContent = '⏳';
+
+  const typingId = 'typing-' + Date.now();
+  chatBox.insertAdjacentHTML('beforeend', `
+    <div class="chat-msg bot" id="${typingId}">
+      <div class="chat-bubble" style="color:var(--muted);font-style:italic;">উত্তর তৈরি হচ্ছে...</div>
+    </div>
+  `);
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: 'তুমি BCS পরীক্ষার আন্তর্জাতিক বিষয়াবলির বিশেষজ্ঞ। বাংলায় উত্তর দাও। উত্তর তথ্যপূর্ণ, কাঠামোগত এবং BCS পরীক্ষা-উপযোগী হবে।',
+        messages: chatHistory
+      })
+    });
+
+    const data = await res.json();
+    const reply = data.content[0].text;
+    chatHistory.push({ role: 'assistant', content: reply });
+
+    document.getElementById(typingId).remove();
+    appendMsg('bot', reply);
+  } catch (e) {
+    document.getElementById(typingId).remove();
+    appendMsg('bot', '❌ ত্রুটি হয়েছে: ' + e.message);
+  } finally {
+    sendBtn.disabled = false;
+    sendBtn.textContent = '↑';
+  }
+}
+
+function appendMsg(role, text) {
+  const chatBox = document.getElementById('chatBox');
+  const now = new Date().toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' });
+  chatBox.insertAdjacentHTML('beforeend', `
+    <div class="chat-msg ${role}">
+      <div class="chat-bubble">${text}</div>
+      <div class="chat-time">${now}</div>
+    </div>
+  `);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// ═══════════════════════════════
+// TOAST
+// ═══════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
