@@ -1,1 +1,138 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BCS প্রস্তুতি পোর্টাল</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.hero-home{background:var(--ink2);color:#fff;padding:4rem 1.5rem 3rem;text-align:center;position:relative;overflow:hidden;}
+.hero-home::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 50px,rgba(212,160,23,.025) 50px,rgba(212,160,23,.025) 51px);}
+.hero-home::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold),var(--teal2));}
+.hero-home h1{font-family:'Noto Serif Bengali',serif;font-size:2.5rem;font-weight:700;line-height:1.25;margin-bottom:.6rem;position:relative;}
+.hero-home h1 span{color:var(--gold);}
+.hero-home .sub{color:rgba(255,255,255,.6);font-size:.95rem;margin-bottom:2rem;position:relative;}
+.cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;}
+.cta-a{display:inline-flex;align-items:center;gap:6px;font-family:'Hind Siliguri',sans-serif;font-size:.92rem;font-weight:600;padding:10px 22px;border-radius:9px;border:none;cursor:pointer;transition:all .18s;}
+.cta-primary{background:var(--red);color:#fff;}
+.cta-primary:hover{background:var(--red2);}
+.cta-ghost{background:transparent;border:1.5px solid rgba(255,255,255,.3);color:#fff;}
+.cta-ghost:hover{background:rgba(255,255,255,.08);}
 
+.stats-band{background:var(--ink);display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;padding:1.4rem;border-bottom:1px solid rgba(212,160,23,.2);}
+.s-item{text-align:center;}
+.s-n{font-family:'Noto Serif Bengali',serif;font-size:1.9rem;font-weight:700;color:var(--gold);display:block;}
+.s-l{font-size:.75rem;color:rgba(255,255,255,.45);}
+
+.subject-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.1rem;margin-top:1.25rem;}
+.sub-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;transition:all .2s;cursor:pointer;}
+.sub-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
+.sub-card-top{display:flex;align-items:center;gap:10px;}
+.sub-icon{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.sub-name{font-family:'Noto Serif Bengali',serif;font-size:.98rem;font-weight:700;}
+.sub-nums{display:flex;gap:8px;font-size:.75rem;}
+.sub-n{padding:3px 9px;border-radius:7px;font-weight:600;}
+.sub-links{display:flex;gap:8px;margin-top:auto;}
+.sub-link{flex:1;text-align:center;padding:6px 8px;background:var(--paper);border-radius:7px;font-size:.78rem;font-weight:500;color:var(--ink);transition:all .15s;}
+.sub-link:hover{background:var(--ink);color:var(--gold);}
+
+.prog-overview{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.5rem;}
+.po-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;}
+.po-sub{font-size:.88rem;font-weight:500;}
+.po-pct{font-size:.75rem;color:var(--muted);}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a class="logo" href="index.html">BCS <span>প্রস্তুতি</span></a>
+    <nav>
+      <a class="nav-link active" href="index.html">🏠 হোম</a>
+      <a class="nav-link" href="prelim.html">📝 প্রিলিমিনারি</a>
+      <a class="nav-link" href="written.html">✍️ লিখিত</a>
+      <a class="nav-link" href="mock-test.html">⏱ মক টেস্ট</a>
+      <a class="nav-link" href="flashcards.html">🃏 Flashcard</a>
+      <a class="nav-link" href="progress.html">📈 Progress</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero-home">
+  <div class="hero-badge">৪৬তম BCS প্রস্তুতি</div>
+  <h1>সম্পূর্ণ <span>BCS পোর্টাল</span></h1>
+  <p class="sub">প্রিলিমিনারি · লিখিত · মক টেস্ট · Flashcard · Progress Tracker</p>
+  <div class="cta-row">
+    <a href="prelim.html" class="cta-a cta-primary">📝 প্রিলিমিনারি শুরু করো</a>
+    <a href="mock-test.html" class="cta-a cta-ghost">⏱ মক টেস্ট দাও</a>
+  </div>
+</div>
+
+<div class="stats-band" id="statsBand"></div>
+
+<div class="container">
+  <div class="sec-head" style="margin-top:2rem;"><div class="sec-title">বিষয়সমূহ</div></div>
+  <div class="subject-grid" id="subjectGrid"></div>
+
+  <div class="sec-head" style="margin-top:2.5rem;">
+    <div class="sec-title">আমার অগ্রগতি</div>
+    <a href="progress.html" style="font-size:.82rem;color:var(--teal);">বিস্তারিত →</a>
+  </div>
+  <div class="prog-overview" id="progOverview"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="data-international.js"></script>
+<script src="data-bangladesh.js"></script>
+<script src="app.js"></script>
+<script>
+const SUBJECTS_META = [
+  { id:'intl', label:'আন্তর্জাতিক বিষয়াবলি', icon:'🌐', color:'#ede9fe', prelimHref:'prelim.html?sub=intl', writtenHref:'written.html?sub=intl',
+    prelim: INTL_PRELIM, written: INTL_WRITTEN },
+  { id:'bd', label:'বাংলাদেশ বিষয়াবলি', icon:'🇧🇩', color:'#fff7ed', prelimHref:'prelim.html?sub=bd', writtenHref:'written.html?sub=bd',
+    prelim: BD_PRELIM, written: BD_WRITTEN },
+];
+
+const prog = Progress.get();
+const totalP = INTL_PRELIM.length + BD_PRELIM.length;
+const totalW = INTL_WRITTEN.length + BD_WRITTEN.length;
+const doneP = [...INTL_PRELIM,...BD_PRELIM].filter(q=>prog[q.id+'_p']?.status==='done').length;
+const doneW = [...INTL_WRITTEN,...BD_WRITTEN].filter(q=>prog[q.id+'_w']?.status==='done').length;
+
+document.getElementById('statsBand').innerHTML = [
+  [totalP,'প্রিলিমিনারি প্রশ্ন'],
+  [totalW,'লিখিত প্রশ্ন'],
+  [doneP+doneW,'সম্পন্ন'],
+  [SUBJECTS_META.length,'বিষয়'],
+].map(([n,l])=>`<div class="s-item"><span class="s-n">${n}</span><span class="s-l">${l}</span></div>`).join('');
+
+document.getElementById('subjectGrid').innerHTML = SUBJECTS_META.map(s=>{
+  const dp = s.prelim.filter(q=>prog[q.id+'_p']?.status==='done').length;
+  const dw = s.written.filter(q=>prog[q.id+'_w']?.status==='done').length;
+  return `
+  <div class="sub-card">
+    <div class="sub-card-top">
+      <div class="sub-icon" style="background:${s.color};">${s.icon}</div>
+      <div class="sub-name">${s.label}</div>
+    </div>
+    <div class="sub-nums">
+      <span class="sub-n" style="background:#ede9fe;color:#5b21b6;">প্রিলি: ${dp}/${s.prelim.length}</span>
+      <span class="sub-n" style="background:#dcfce7;color:#166534;">লিখিত: ${dw}/${s.written.length}</span>
+    </div>
+    <div class="sub-links">
+      <a href="${s.prelimHref}" class="sub-link">📝 প্রিলিমিনারি</a>
+      <a href="${s.writtenHref}" class="sub-link">✍️ লিখিত</a>
+    </div>
+  </div>`;
+}).join('');
+
+document.getElementById('progOverview').innerHTML = SUBJECTS_META.map(s=>{
+  const total = s.prelim.length + s.written.length;
+  const done = s.prelim.filter(q=>prog[q.id+'_p']?.status==='done').length +
+               s.written.filter(q=>prog[q.id+'_w']?.status==='done').length;
+  const p = total ? Math.round(done/total*100) : 0;
+  return `
+  <div class="po-row"><span class="po-sub">${s.icon} ${s.label}</span><span class="po-pct">${done}/${total} · ${p}%</span></div>
+  <div class="prog-wrap" style="margin-bottom:1rem;"><div class="prog-bar" style="width:${p}%"></div></div>`;
+}).join('');
+</script>
+</body>
+</html>

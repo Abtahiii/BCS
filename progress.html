@@ -1,1 +1,67 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Progress — BCS</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a class="logo" href="index.html">BCS <span>প্রস্তুতি</span></a>
+    <nav>
+      <a class="nav-link" href="index.html">🏠 হোম</a>
+      <a class="nav-link" href="prelim.html">📝 প্রিলিমিনারি</a>
+      <a class="nav-link" href="written.html">✍️ লিখিত</a>
+      <a class="nav-link" href="mock-test.html">⏱ মক টেস্ট</a>
+      <a class="nav-link" href="flashcards.html">🃏 Flashcard</a>
+      <a class="nav-link active" href="progress.html">📈 Progress</a>
+    </nav>
+  </div>
+</header>
+<div class="page-hero"><div class="hero-inner"><div class="hero-tag">আমার অগ্রগতি</div><h1>📈 Progress <span>Tracker</span></h1><p>বিষয় ও ধরন অনুযায়ী তোমার অগ্রগতি</p></div></div>
 
+<div class="container">
+  <div class="grid4" id="statsGrid"></div>
+  <div id="subjectCards"></div>
+  <div style="margin-top:2rem;background:var(--paper2);border-radius:12px;padding:1.25rem;text-align:center;">
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:.75rem;">সব Progress রিসেট করতে চাইলে:</p>
+    <button class="btn btn-ghost" onclick="resetAll()" style="color:var(--red);border-color:var(--red);">⚠️ রিসেট</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="data-international.js"></script>
+<script src="data-bangladesh.js"></script>
+<script src="app.js"></script>
+<script>
+const prog=Progress.get();
+const SUBS=[
+  {id:'intl',label:'আন্তর্জাতিক বিষয়াবলি',icon:'🌐',color:'#ede9fe',prelim:INTL_PRELIM,written:INTL_WRITTEN},
+  {id:'bd',label:'বাংলাদেশ বিষয়াবলি',icon:'🇧🇩',color:'#fff7ed',prelim:BD_PRELIM,written:BD_WRITTEN},
+];
+const allP=[...INTL_PRELIM,...BD_PRELIM],allW=[...INTL_WRITTEN,...BD_WRITTEN];
+const dp=allP.filter(q=>prog[q.id+'_p']?.status==='done').length;
+const dw=allW.filter(q=>prog[q.id+'_w']?.status==='done').length;
+document.getElementById('statsGrid').innerHTML=[
+  [dp,'✅ প্রিলিমিনারি সম্পন্ন','var(--teal)'],
+  [dw,'✅ লিখিত সম্পন্ন','var(--blue2)'],
+  [allP.length-dp,'⬜ প্রিলি বাকি','var(--red)'],
+  [allW.length-dw,'⬜ লিখিত বাকি','var(--gold)'],
+].map(([n,l,c])=>`<div class="stat-card"><span class="stat-big" style="color:${c}">${n}</span><div class="stat-lbl">${l}</div></div>`).join('');
+
+document.getElementById('subjectCards').innerHTML=SUBS.map(s=>{
+  const tdp=s.prelim.filter(q=>prog[q.id+'_p']?.status==='done').length;
+  const tdw=s.written.filter(q=>prog[q.id+'_w']?.status==='done').length;
+  const pp=s.prelim.length?Math.round(tdp/s.prelim.length*100):0;
+  const wp=s.written.length?Math.round(tdw/s.written.length*100):0;
+  return`<div class="sub-card">
+    <div class="sub-top"><div class="sub-icon" style="background:${s.color};">${s.icon}</div><div class="sub-name">${s.label}</div></div>
+    <div class="row-line"><span class="row-label">📝 প্রিলিমিনারি</span><div style="flex:1;"><div class="prog-wrap"><div class="prog-bar" style="width:${pp}%"></div></div></div><span class="row-pct">${tdp}/${s.prelim.length} · ${pp}%</span></div>
+    <div class="row-line"><span class="row-label">✍️ লিখিত</span><div style="flex:1;"><div class="prog-wrap"><div class="prog-bar" style="background:var(--blue2);width:${wp}%"></div></div></div><span class="row-pct">${tdw}/${s.written.length} · ${wp}%</span></div>
+  </div>`;
+}).join('');
+
+function resetAll(){if(!confirm('সব Progress মুছে ফেলা হবে?'))return;localStorage.removeItem('bcs_prog');localStorage.removeItem('bcs_notes');showToast('✓ রিসেট হয়েছে');setTimeout(()=>location.reload(),1000);}
+</script>
+</body>
+</html>

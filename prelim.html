@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>প্রিলিমিনারি — BCS</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.q-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:.85rem;animation:fadeUp .25s ease both;}
+.q-card:hover{border-color:rgba(26,26,46,.2);}
+.q-meta{display:flex;align-items:center;gap:7px;margin-bottom:.7rem;flex-wrap:wrap;}
+.q-num{font-size:.68rem;font-weight:700;background:var(--paper2);color:var(--muted);padding:2px 7px;border-radius:5px;}
+.status-ring{width:8px;height:8px;border-radius:50%;background:#d1d5db;flex-shrink:0;}
+.status-ring.done{background:var(--teal2);}
+.q-text{font-size:.95rem;line-height:1.8;margin-bottom:1rem;font-weight:500;}
+
+/* Options */
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:9px;padding:9px 13px;border-radius:9px;border:1.5px solid var(--border);cursor:pointer;font-size:.88rem;line-height:1.6;transition:all .16s;background:#fff;}
+.opt:hover{border-color:var(--blue2);background:#f0f7ff;}
+.opt.selected{border-color:var(--blue);background:#e8f4ff;}
+.opt.correct{border-color:var(--teal);background:#e8f8f3;pointer-events:none;}
+.opt.wrong{border-color:var(--red);background:#fdf0ef;pointer-events:none;}
+.opt.reveal-correct{border-color:var(--teal);background:#e8f8f3;}
+.opt-badge{width:24px;height:24px;border-radius:50%;background:var(--paper2);font-size:.73rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.opt.correct .opt-badge,.opt.reveal-correct .opt-badge{background:var(--teal2);color:#fff;}
+.opt.wrong .opt-badge{background:var(--red);color:#fff;}
+
+.exp-box{margin-top:.75rem;background:#f0fdf4;border:1px solid rgba(14,102,85,.18);border-radius:8px;padding:.9rem 1rem;font-size:.85rem;line-height:1.75;display:none;}
+.exp-box.show{display:block;animation:fadeUp .2s ease;}
+.exp-label{font-size:.68rem;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem;}
+
+.q-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:.9rem;}
+
+/* Note inline */
+.note-box{margin-top:.75rem;display:none;}
+.note-box.show{display:block;}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a class="logo" href="index.html">BCS <span>প্রস্তুতি</span></a>
+    <nav>
+      <a class="nav-link" href="index.html">🏠 হোম</a>
+      <a class="nav-link active" href="prelim.html">📝 প্রিলিমিনারি</a>
+      <a class="nav-link" href="written.html">✍️ লিখিত</a>
+      <a class="nav-link" href="mock-test.html">⏱ মক টেস্ট</a>
+      <a class="nav-link" href="flashcards.html">🃏 Flashcard</a>
+      <a class="nav-link" href="progress.html">📈 Progress</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="hero-inner">
+    <div class="hero-tag">MCQ অনুশীলন</div>
+    <h1>📝 প্রিলিমিনারি <span>প্রশ্নব্যাংক</span></h1>
+    <p>অপশন বেছে নাও · উত্তর যাচাই করো · নোট রাখো</p>
+  </div>
+</div>
+
+<div class="container" style="padding-top:1.5rem;">
+  <div class="two-col">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h3>বিষয়</h3>
+      <button class="sl active" onclick="setSub('all',this)">সব বিষয় <span class="cnt" id="cnt-all"></span></button>
+      <button class="sl" onclick="setSub('intl',this)">🌐 আন্তর্জাতিক <span class="cnt" id="cnt-intl"></span></button>
+      <button class="sl" onclick="setSub('bd',this)">🇧🇩 বাংলাদেশ <span class="cnt" id="cnt-bd"></span></button>
+      <div class="sidebar-divider"></div>
+      <h3>টপিক (আন্তর্জাতিক)</h3>
+      <div id="intlTopicFilters"></div>
+      <div class="sidebar-divider"></div>
+      <h3>অবস্থা</h3>
+      <button class="sl" onclick="setStatus('all',this)">সব</button>
+      <button class="sl" onclick="setStatus('unseen',this)">⬜ পড়িনি</button>
+      <button class="sl" onclick="setStatus('done',this)">✅ সম্পন্ন</button>
+    </div>
+
+    <!-- Main -->
+    <div>
+      <div class="sec-head">
+        <div class="sec-title" id="mainTitle">সকল প্রিলিমিনারি প্রশ্ন</div>
+        <span class="badge" id="mainCount"></span>
+      </div>
+      <div id="qGrid"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="data-international.js"></script>
+<script src="data-bangladesh.js"></script>
+<script src="app.js"></script>
+<script>
+// Merge all prelim data
+const ALL_PRELIM = [
+  ...INTL_PRELIM.map(q=>({...q, sub:'intl', subLabel:'আন্তর্জাতিক'})),
+  ...BD_PRELIM.map(q=>({...q, sub:'bd', subLabel:'বাংলাদেশ'})),
+];
+
+// Topic config
+const TOPIC_MAP = {};
+[...INTL_TOPICS, ...BD_TOPICS].forEach(t => { TOPIC_MAP[t.id] = t.label; });
+
+let curSub = new URLSearchParams(location.search).get('sub') || 'all';
+let curTopic = 'all';
+let curStatus = 'all';
+
+// Build topic filters
+const intlTopicEl = document.getElementById('intlTopicFilters');
+INTL_TOPICS.filter(t=>t.id!=='all').forEach(t => {
+  const btn = document.createElement('button');
+  btn.className = 'sl';
+  btn.textContent = t.label;
+  btn.onclick = () => { setTopic(t.id, btn); };
+  btn.id = 'tf-' + t.id;
+  intlTopicEl.appendChild(btn);
+});
+
+// Counts
+document.getElementById('cnt-all').textContent = ALL_PRELIM.length;
+document.getElementById('cnt-intl').textContent = INTL_PRELIM.length;
+document.getElementById('cnt-bd').textContent = BD_PRELIM.length;
+
+function filtered() {
+  return ALL_PRELIM.filter(q => {
+    const subOk = curSub === 'all' || q.sub === curSub;
+    const topicOk = curTopic === 'all' || q.topic === curTopic;
+    const stOk = curStatus === 'all' || Progress.status(q.id+'_p') === curStatus;
+    return subOk && topicOk && stOk;
+  });
+}
+
+function setSub(v, el) {
+  curSub = v; curTopic = 'all';
+  document.querySelectorAll('.sl').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('mainTitle').textContent = v==='all' ? 'সকল প্রিলিমিনারি প্রশ্ন' : (v==='intl' ? 'আন্তর্জাতিক বিষয়াবলি' : 'বাংলাদেশ বিষয়াবলি');
+  render();
+}
+function setTopic(v, el) {
+  curTopic = v; curSub = 'intl';
+  document.querySelectorAll('.sl').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+function setStatus(v, el) {
+  curStatus = v;
+  document.querySelectorAll('.sl').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+const letters = ['ক','খ','গ','ঘ'];
+
+function render() {
+  const qs = filtered();
+  document.getElementById('mainCount').textContent = qs.length + 'টি';
+  if (!qs.length) {
+    document.getElementById('qGrid').innerHTML = '<div style="text-align:center;padding:3rem;color:var(--muted);">কোনো প্রশ্ন পাওয়া যায়নি</div>';
+    return;
+  }
+  document.getElementById('qGrid').innerHTML = qs.map((q,i) => {
+    const st = Progress.status(q.id+'_p');
+    const tlabel = TOPIC_MAP[q.topic] || q.topic;
+    return `
+    <div class="q-card" id="qc-${q.id}" style="animation-delay:${i*.04}s">
+      <div class="q-meta">
+        <div class="status-ring ${st}"></div>
+        <span class="q-num">${q.sub==='intl'?'আন্তর্জাতিক':'বাংলাদেশ'}</span>
+        <span class="tag tag-${q.topic}">${tlabel}</span>
+      </div>
+      <div class="q-text">${q.q}</div>
+      <div class="opts" id="opts-${q.id}">
+        ${q.opts.map((o,j) => `
+          <div class="opt" id="opt-${q.id}-${j}" onclick="pick('${q.id}',${j},${q.ans})">
+            <div class="opt-badge">${letters[j]}</div>
+            <span>${o}</span>
+          </div>`).join('')}
+      </div>
+      ${q.exp ? `<div class="exp-box" id="exp-${q.id}"><div class="exp-label">ব্যাখ্যা</div>${q.exp}</div>` : ''}
+      <div class="q-actions">
+        <button class="btn btn-ghost" onclick="revealAns('${q.id}',${q.ans})" id="reveal-${q.id}" style="font-size:.78rem;padding:5px 12px;">👁 উত্তর দেখো</button>
+        <button class="btn btn-teal" onclick="markDone('${q.id}')" id="done-${q.id}" style="font-size:.78rem;padding:5px 12px;">${st==='done'?'✅ সম্পন্ন':'☑ সম্পন্ন করো'}</button>
+        <button class="btn btn-ghost" onclick="toggleNote('${q.id}')" style="font-size:.78rem;padding:5px 12px;">📝 নোট</button>
+      </div>
+      <div class="note-box" id="note-${q.id}">
+        <textarea rows="2" style="margin-top:.5rem;font-size:.85rem;" placeholder="নোট লিখুন..." id="ni-${q.id}">${Notes.get('p_'+q.id)}</textarea>
+        <button class="btn btn-teal" style="margin-top:5px;font-size:.78rem;" onclick="saveNote('${q.id}')">সংরক্ষণ</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function pick(id, chosen, correct) {
+  const opts = document.querySelectorAll(`[id^="opt-${id}-"]`);
+  opts.forEach(o => o.style.pointerEvents = 'none');
+  const chosenEl = document.getElementById(`opt-${id}-${chosen}`);
+  if (chosen === correct) {
+    chosenEl.classList.add('correct');
+    showToast('✅ সঠিক উত্তর!');
+    markDone(id);
+  } else {
+    chosenEl.classList.add('wrong');
+    document.getElementById(`opt-${id}-${correct}`).classList.add('reveal-correct');
+    showToast('❌ ভুল উত্তর');
+  }
+  const exp = document.getElementById('exp-'+id);
+  if (exp) exp.classList.add('show');
+  document.getElementById('reveal-'+id).style.display = 'none';
+}
+
+function revealAns(id, correct) {
+  document.getElementById(`opt-${id}-${correct}`).classList.add('reveal-correct');
+  const exp = document.getElementById('exp-'+id);
+  if (exp) exp.classList.add('show');
+  document.getElementById('reveal-'+id).style.display = 'none';
+}
+
+function markDone(id) {
+  Progress.mark(id+'_p', 'done');
+  const ring = document.querySelector(`#qc-${id} .status-ring`);
+  if (ring) { ring.classList.remove('unseen'); ring.classList.add('done'); }
+  const btn = document.getElementById('done-'+id);
+  if (btn) btn.textContent = '✅ সম্পন্ন';
+  showToast('✅ সম্পন্ন হিসেবে চিহ্নিত');
+}
+
+function toggleNote(id) {
+  document.getElementById('note-'+id).classList.toggle('show');
+}
+function saveNote(id) {
+  Notes.set('p_'+id, document.getElementById('ni-'+id).value);
+  showToast('✓ নোট সংরক্ষিত');
+}
+
+// init
+if (curSub !== 'all') {
+  const btn = document.querySelector(`.sl[onclick*="'${curSub}'"]`);
+  if (btn) { document.querySelector('.sl.active')?.classList.remove('active'); btn.classList.add('active'); }
+  document.getElementById('mainTitle').textContent = curSub==='bd' ? 'বাংলাদেশ বিষয়াবলি' : 'আন্তর্জাতিক বিষয়াবলি';
+}
+render();
+</script>
+</body>
+</html>

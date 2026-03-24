@@ -1,1 +1,135 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcard — BCS</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.fc-wrap{max-width:600px;margin:0 auto;}
+.fc-controls{display:flex;gap:10px;margin-bottom:1.25rem;flex-wrap:wrap;}
+.fc-controls select{width:auto;flex:1;min-width:160px;}
+.fc-stats{font-size:.8rem;color:var(--muted);margin-bottom:1.1rem;display:flex;gap:1.2rem;flex-wrap:wrap;}
+.card-area{perspective:1200px;cursor:pointer;margin-bottom:1.1rem;}
+.card-inner{position:relative;width:100%;height:240px;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);}
+.card-inner.flipped{transform:rotateY(180deg);}
+.face{position:absolute;inset:0;background:#fff;border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.face-front{border-top:4px solid var(--gold);}
+.face-back{transform:rotateY(180deg);border-top:4px solid var(--teal2);}
+.fc-label{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;}
+.fc-content{font-family:'Noto Serif Bengali',serif;font-size:1.05rem;line-height:1.7;}
+.fc-hint{font-size:.75rem;color:var(--muted);margin-top:.6rem;}
+.dot-row{display:flex;gap:5px;justify-content:center;margin:.75rem 0;flex-wrap:wrap;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .15s;}
+.dot.cur{background:var(--gold);}
+.dot.kn{background:var(--teal2);}
+.dot.un{background:var(--red);}
+.fc-nav{display:flex;align-items:center;justify-content:space-between;}
+.fc-ctr{font-family:'Noto Serif Bengali',serif;font-size:1.05rem;font-weight:700;}
+.fc-btns{display:flex;gap:8px;justify-content:center;margin-top:1rem;}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a class="logo" href="index.html">BCS <span>প্রস্তুতি</span></a>
+    <nav>
+      <a class="nav-link" href="index.html">🏠 হোম</a>
+      <a class="nav-link" href="prelim.html">📝 প্রিলিমিনারি</a>
+      <a class="nav-link" href="written.html">✍️ লিখিত</a>
+      <a class="nav-link" href="mock-test.html">⏱ মক টেস্ট</a>
+      <a class="nav-link active" href="flashcards.html">🃏 Flashcard</a>
+      <a class="nav-link" href="progress.html">📈 Progress</a>
+    </nav>
+  </div>
+</header>
+<div class="page-hero"><div class="hero-inner"><div class="hero-tag">দ্রুত রিভিশন</div><h1>🃏 Flash<span>card</span></h1><p>ক্লিক করো → উত্তর দেখো → জানা/অজানা চিহ্নিত করো</p></div></div>
+<div class="container">
+  <div class="fc-wrap">
+    <div class="fc-controls">
+      <select id="subF" onchange="load()">
+        <option value="all">সব বিষয়</option>
+        <option value="international">আন্তর্জাতিক</option>
+        <option value="bangladesh">বাংলাদেশ</option>
+      </select>
+      <select id="modeF" onchange="load()">
+        <option value="all">সব কার্ড</option>
+        <option value="un">অজানা কার্ড</option>
+        <option value="kn">জানা কার্ড</option>
+      </select>
+      <button class="btn btn-ghost" onclick="shuffleCards()" style="font-size:.8rem;">🔀 Shuffle</button>
+    </div>
+    <div class="fc-stats" id="fcStats"></div>
+    <div class="dot-row" id="dots"></div>
+    <div class="card-area" onclick="flip()">
+      <div class="card-inner" id="ci">
+        <div class="face face-front"><div class="fc-label">প্রশ্ন</div><div class="fc-content" id="cf"></div><div class="fc-hint">ক্লিক করো উত্তর দেখতে</div></div>
+        <div class="face face-back"><div class="fc-label">উত্তর</div><div class="fc-content" id="cb"></div></div>
+      </div>
+    </div>
+    <div class="fc-nav">
+      <button class="btn btn-ghost" onclick="prev()">← আগের</button>
+      <div style="text-align:center;"><div class="fc-ctr" id="fcCtr">১/১</div><div id="fcSt" style="font-size:.75rem;margin-top:3px;"></div></div>
+      <button class="btn btn-ghost" onclick="nxt()">পরের →</button>
+    </div>
+    <div class="fc-btns">
+      <button class="btn btn-teal" onclick="mark('kn')" style="flex:1;max-width:180px;">✅ জানি</button>
+      <button class="btn btn-primary" onclick="mark('un')" style="flex:1;max-width:180px;">❌ জানি না</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="data-international.js"></script>
+<script src="data-bangladesh.js"></script>
+<script src="app.js"></script>
+<script>
+// Build flashcards from prelim questions
+const FC_DATA = [
+  ...INTL_PRELIM.map(q=>({id:'fc_ip_'+q.id, sub:'international', front:q.q, back: q.opts[q.ans] + (q.exp ? '\n\n💡 ' + q.exp : '')})),
+  ...BD_PRELIM.map(q=>({id:'fc_bp_'+q.id, sub:'bangladesh', front:q.q, back: q.opts[q.ans] + (q.exp ? '\n\n💡 ' + q.exp : '')})),
+];
 
+let cards=[],cur=0,flipped=false;
+let status=JSON.parse(localStorage.getItem('bcs_fc2')||'{}');
+
+function saveStatus(){localStorage.setItem('bcs_fc2',JSON.stringify(status));}
+
+function load(){
+  const sub=document.getElementById('subF').value;
+  const mode=document.getElementById('modeF').value;
+  let pool=FC_DATA.filter(c=>sub==='all'||c.sub===sub);
+  if(mode==='kn') pool=pool.filter(c=>status[c.id]==='kn');
+  if(mode==='un') pool=pool.filter(c=>status[c.id]==='un');
+  cards=pool;cur=0;flipped=false;
+  render();updateStats();
+}
+
+function shuffleCards(){cards=[...cards].sort(()=>Math.random()-.5);cur=0;flipped=false;render();showToast('🔀 Shuffled!');}
+
+function flip(){flipped=!flipped;document.getElementById('ci').classList.toggle('flipped',flipped);}
+
+function render(){
+  if(!cards.length){document.getElementById('cf').textContent='কোনো কার্ড নেই';document.getElementById('cb').textContent='';document.getElementById('fcCtr').textContent='০/০';document.getElementById('dots').innerHTML='';return;}
+  const c=cards[cur];
+  document.getElementById('cf').textContent=c.front;
+  document.getElementById('cb').textContent=c.back;
+  document.getElementById('ci').classList.remove('flipped');flipped=false;
+  document.getElementById('fcCtr').textContent=`${cur+1}/${cards.length}`;
+  const st=status[c.id];
+  document.getElementById('fcSt').innerHTML=st==='kn'?'<span style="color:var(--teal);">✅ জানা</span>':st==='un'?'<span style="color:var(--red);">❌ অজানা</span>':'';
+  document.getElementById('dots').innerHTML=cards.map((c2,i)=>`<div class="dot ${i===cur?'cur':status[c2.id]==='kn'?'kn':status[c2.id]==='un'?'un':''}" onclick="goTo(${i})"></div>`).join('');
+}
+
+function goTo(i){cur=i;flipped=false;render();}
+function prev(){if(cur>0){cur--;flipped=false;render();}}
+function nxt(){if(cur<cards.length-1){cur++;flipped=false;render();}}
+function mark(st){if(!cards.length)return;status[cards[cur].id]=st;saveStatus();updateStats();render();showToast(st==='kn'?'✅ জানা চিহ্নিত':'❌ অজানা চিহ্নিত');if(cur<cards.length-1)setTimeout(nxt,280);}
+
+function updateStats(){
+  const total=cards.length,kn=cards.filter(c=>status[c.id]==='kn').length,un=cards.filter(c=>status[c.id]==='un').length;
+  document.getElementById('fcStats').innerHTML=`<span>মোট: <strong>${total}</strong></span><span style="color:var(--teal);">✅ জানা: <strong>${kn}</strong></span><span style="color:var(--red);">❌ অজানা: <strong>${un}</strong></span><span>⬜ দেখিনি: <strong>${total-kn-un}</strong></span>`;
+}
+
+load();
+</script>
+</body>
+</html>

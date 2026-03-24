@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>লিখিত প্রশ্ন — BCS</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.w-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.5rem;margin-bottom:1rem;animation:fadeUp .25s ease both;transition:border-color .2s;}
+.w-card:hover{border-color:rgba(26,26,46,.2);}
+.w-meta{display:flex;align-items:center;gap:8px;margin-bottom:.75rem;flex-wrap:wrap;}
+.w-num{font-size:.68rem;font-weight:700;background:var(--paper2);color:var(--muted);padding:2px 7px;border-radius:5px;}
+.marks-badge{font-size:.68rem;font-weight:700;background:var(--ink);color:var(--gold);padding:2px 8px;border-radius:5px;}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#d1d5db;flex-shrink:0;}
+.status-dot.done{background:var(--teal2);}
+.status-dot.review{background:var(--gold);}
+.w-q{font-size:.97rem;line-height:1.85;margin-bottom:1rem;}
+
+/* Answer panel */
+.ans-panel{display:none;margin-top:.75rem;border-radius:10px;overflow:hidden;border:1px solid rgba(14,102,85,.2);}
+.ans-panel.show{display:block;animation:fadeUp .25s ease;}
+.ans-header{background:var(--teal);color:#fff;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;}
+.ans-label{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+.ans-close{background:none;border:none;color:rgba(255,255,255,.8);cursor:pointer;font-size:1.1rem;padding:0;}
+.ans-body{padding:1.1rem 1.25rem;background:#f0fdf4;font-size:.9rem;line-height:1.9;white-space:pre-wrap;}
+
+.w-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:.9rem;}
+.note-box{display:none;margin-top:.75rem;}
+.note-box.show{display:block;animation:fadeUp .2s ease;}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a class="logo" href="index.html">BCS <span>প্রস্তুতি</span></a>
+    <nav>
+      <a class="nav-link" href="index.html">🏠 হোম</a>
+      <a class="nav-link" href="prelim.html">📝 প্রিলিমিনারি</a>
+      <a class="nav-link active" href="written.html">✍️ লিখিত</a>
+      <a class="nav-link" href="mock-test.html">⏱ মক টেস্ট</a>
+      <a class="nav-link" href="flashcards.html">🃏 Flashcard</a>
+      <a class="nav-link" href="progress.html">📈 Progress</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="hero-inner">
+    <div class="hero-tag">লিখিত প্রস্তুতি</div>
+    <h1>✍️ লিখিত <span>প্রশ্ন ও উত্তর</span></h1>
+    <p>প্রশ্ন পড়ো · নিজে লেখার চেষ্টা করো · বোতাম চাপলে নমুনা উত্তর দেখাবে</p>
+  </div>
+</div>
+
+<div class="container" style="padding-top:1.5rem;">
+  <div class="two-col">
+    <div class="sidebar">
+      <h3>বিষয়</h3>
+      <button class="sl active" onclick="setSub('all',this)">সব বিষয় <span class="cnt" id="cnt-all"></span></button>
+      <button class="sl" onclick="setSub('intl',this)">🌐 আন্তর্জাতিক <span class="cnt" id="cnt-intl"></span></button>
+      <button class="sl" onclick="setSub('bd',this)">🇧🇩 বাংলাদেশ <span class="cnt" id="cnt-bd"></span></button>
+      <div class="sidebar-divider"></div>
+      <h3>টপিক (আন্তর্জাতিক)</h3>
+      <div id="topicFilters"></div>
+      <div class="sidebar-divider"></div>
+      <h3>অবস্থা</h3>
+      <button class="sl" onclick="setStatus('all',this)">সব</button>
+      <button class="sl" onclick="setStatus('unseen',this)">⬜ পড়িনি</button>
+      <button class="sl" onclick="setStatus('done',this)">✅ সম্পন্ন</button>
+      <button class="sl" onclick="setStatus('review',this)">🔁 রিভিউ</button>
+    </div>
+
+    <div>
+      <div class="sec-head">
+        <div class="sec-title" id="mainTitle">সকল লিখিত প্রশ্ন</div>
+        <span class="badge" id="mainCount"></span>
+      </div>
+      <div id="wGrid"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="data-international.js"></script>
+<script src="data-bangladesh.js"></script>
+<script src="app.js"></script>
+<script>
+const ALL_WRITTEN = [
+  ...INTL_WRITTEN.map(q=>({...q, sub:'intl'})),
+  ...BD_WRITTEN.map(q=>({...q, sub:'bd'})),
+];
+const TOPIC_MAP = {};
+[...INTL_TOPICS,...BD_TOPICS].forEach(t => { TOPIC_MAP[t.id] = t.label; });
+
+let curSub = new URLSearchParams(location.search).get('sub') || 'all';
+let curTopic = 'all', curStatus = 'all';
+
+document.getElementById('cnt-all').textContent = ALL_WRITTEN.length;
+document.getElementById('cnt-intl').textContent = INTL_WRITTEN.length;
+document.getElementById('cnt-bd').textContent = BD_WRITTEN.length;
+
+const topicFiltersEl = document.getElementById('topicFilters');
+INTL_TOPICS.filter(t=>t.id!=='all').forEach(t => {
+  const btn = document.createElement('button');
+  btn.className = 'sl';
+  btn.textContent = t.label;
+  btn.onclick = () => { setTopic(t.id, btn); };
+  topicFiltersEl.appendChild(btn);
+});
+
+function filtered() {
+  return ALL_WRITTEN.filter(q => {
+    const subOk = curSub==='all' || q.sub===curSub;
+    const topicOk = curTopic==='all' || q.topic===curTopic;
+    const stOk = curStatus==='all' || Progress.status(q.id+'_w')===curStatus;
+    return subOk && topicOk && stOk;
+  });
+}
+function setSub(v,el){curSub=v;curTopic='all';document.querySelectorAll('.sl').forEach(b=>b.classList.remove('active'));el.classList.add('active');document.getElementById('mainTitle').textContent=v==='all'?'সকল লিখিত প্রশ্ন':v==='intl'?'আন্তর্জাতিক বিষয়াবলি':'বাংলাদেশ বিষয়াবলি';render();}
+function setTopic(v,el){curTopic=v;curSub='intl';document.querySelectorAll('.sl').forEach(b=>b.classList.remove('active'));el.classList.add('active');render();}
+function setStatus(v,el){curStatus=v;document.querySelectorAll('.sl').forEach(b=>b.classList.remove('active'));el.classList.add('active');render();}
+
+function render(){
+  const qs=filtered();
+  document.getElementById('mainCount').textContent=qs.length+'টি';
+  if(!qs.length){document.getElementById('wGrid').innerHTML='<div style="text-align:center;padding:3rem;color:var(--muted);">কোনো প্রশ্ন পাওয়া যায়নি</div>';return;}
+  document.getElementById('wGrid').innerHTML=qs.map((q,i)=>{
+    const st=Progress.status(q.id+'_w');
+    const tlabel=TOPIC_MAP[q.topic]||q.topic;
+    return `
+    <div class="w-card" id="wc-${q.id}" style="animation-delay:${i*.04}s">
+      <div class="w-meta">
+        <div class="status-dot ${st}"></div>
+        <span class="w-num">${q.sub==='intl'?'আন্তর্জাতিক':'বাংলাদেশ'}</span>
+        <span class="tag tag-${q.topic}">${tlabel}</span>
+        <span class="marks-badge">${q.marks} নম্বর</span>
+      </div>
+      <div class="w-q">${q.q}</div>
+      <div class="ans-panel" id="ap-${q.id}">
+        <div class="ans-header">
+          <span class="ans-label">নমুনা উত্তর</span>
+          <button class="ans-close" onclick="hideAns('${q.id}')">✕</button>
+        </div>
+        <div class="ans-body">${q.answer}</div>
+      </div>
+      <div class="w-actions">
+        <button class="btn btn-primary" onclick="toggleAns('${q.id}')" id="ansbtn-${q.id}" style="font-size:.8rem;padding:7px 14px;">📖 নমুনা উত্তর দেখো</button>
+        <button class="btn btn-teal" onclick="markWDone('${q.id}')" id="wdone-${q.id}" style="font-size:.8rem;padding:7px 14px;">${st==='done'?'✅ সম্পন্ন':'☑ সম্পন্ন করো'}</button>
+        <button class="btn btn-ghost" onclick="markReview('${q.id}')" style="font-size:.8rem;padding:7px 14px;">🔁 রিভিউ</button>
+        <button class="btn btn-ghost" onclick="toggleNote('${q.id}')" style="font-size:.8rem;padding:7px 14px;">📝 নোট</button>
+      </div>
+      <div class="note-box" id="wnote-${q.id}">
+        <textarea rows="3" style="margin-top:.5rem;font-size:.85rem;" placeholder="নিজের নোট লিখুন..." id="wni-${q.id}">${Notes.get('w_'+q.id)}</textarea>
+        <button class="btn btn-teal" style="margin-top:5px;font-size:.78rem;" onclick="saveWNote('${q.id}')">সংরক্ষণ</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleAns(id){
+  const p=document.getElementById('ap-'+id);
+  const btn=document.getElementById('ansbtn-'+id);
+  if(p.classList.toggle('show')){btn.textContent='📖 উত্তর লুকাও';}
+  else{btn.textContent='📖 নমুনা উত্তর দেখো';}
+}
+function hideAns(id){
+  document.getElementById('ap-'+id).classList.remove('show');
+  document.getElementById('ansbtn-'+id).textContent='📖 নমুনা উত্তর দেখো';
+}
+function markWDone(id){Progress.mark(id+'_w','done');render();showToast('✅ সম্পন্ন চিহ্নিত');}
+function markReview(id){Progress.mark(id+'_w','review');render();showToast('🔁 রিভিউতে যোগ করা হয়েছে');}
+function toggleNote(id){document.getElementById('wnote-'+id).classList.toggle('show');}
+function saveWNote(id){Notes.set('w_'+id,document.getElementById('wni-'+id).value);showToast('✓ নোট সংরক্ষিত');}
+
+if(curSub!=='all'){const btn=document.querySelector(`.sl[onclick*="'${curSub}'"]`);if(btn){document.querySelector('.sl.active')?.classList.remove('active');btn.classList.add('active');}document.getElementById('mainTitle').textContent=curSub==='bd'?'বাংলাদেশ বিষয়াবলি':'আন্তর্জাতিক বিষয়াবলি';}
+render();
+</script>
+</body>
+</html>

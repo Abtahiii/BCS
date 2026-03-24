@@ -1,1 +1,172 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>মক টেস্ট — BCS</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.setup-wrap{max-width:520px;margin:0 auto;}
+.setup-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:2rem;}
+.setup-card h2{font-family:'Noto Serif Bengali',serif;font-size:1.3rem;margin-bottom:1.5rem;}
+.setup-row{margin-bottom:1.1rem;}
+.setup-row label{display:block;font-size:.82rem;font-weight:600;color:var(--muted);margin-bottom:.4rem;}
 
+.test-bar{background:var(--ink);color:#fff;padding:.7rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--gold);}
+.timer{font-family:'Noto Serif Bengali',serif;font-size:1.3rem;font-weight:700;color:var(--gold);}
+.timer.warn{color:var(--red2);}
+
+.test-wrap{max-width:680px;margin:0 auto;padding:2rem 1.5rem;}
+.mcq-q{font-size:.98rem;font-weight:500;line-height:1.8;margin-bottom:1.1rem;}
+.mcq-opts{display:flex;flex-direction:column;gap:8px;}
+.mcq-opt{background:#fff;border:1.5px solid var(--border);border-radius:9px;padding:10px 14px;cursor:pointer;font-size:.9rem;line-height:1.6;transition:all .16s;display:flex;align-items:center;gap:9px;}
+.mcq-opt:hover{border-color:var(--blue2);background:#f0f7ff;}
+.mcq-opt.sel{border-color:var(--blue);background:#e8f4ff;}
+.mcq-opt.cor{border-color:var(--teal);background:#e8f8f3;pointer-events:none;}
+.mcq-opt.wrg{border-color:var(--red);background:#fdf0ef;pointer-events:none;}
+.opt-l{width:26px;height:26px;border-radius:50%;background:var(--paper2);font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+.res-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:2rem;max-width:600px;margin:0 auto;}
+.res-score{text-align:center;margin-bottom:1.5rem;}
+.score-big{font-family:'Noto Serif Bengali',serif;font-size:3.5rem;font-weight:700;color:var(--teal);display:block;}
+.res-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+.rs{text-align:center;padding:.9rem;background:var(--paper);border-radius:9px;}
+.rs-n{font-size:1.6rem;font-weight:700;font-family:'Noto Serif Bengali',serif;}
+.rs-l{font-size:.72rem;color:var(--muted);}
+
+.rv-item{background:#fff;border:1px solid var(--border);border-radius:9px;padding:.9rem;margin-bottom:.7rem;}
+.rv-item.w{border-color:rgba(192,57,43,.25);background:#fdf8f8;}
+.rv-q{font-size:.87rem;line-height:1.7;margin-bottom:.4rem;}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a class="logo" href="index.html">BCS <span>প্রস্তুতি</span></a>
+    <nav>
+      <a class="nav-link" href="index.html">🏠 হোম</a>
+      <a class="nav-link" href="prelim.html">📝 প্রিলিমিনারি</a>
+      <a class="nav-link" href="written.html">✍️ লিখিত</a>
+      <a class="nav-link active" href="mock-test.html">⏱ মক টেস্ট</a>
+      <a class="nav-link" href="flashcards.html">🃏 Flashcard</a>
+      <a class="nav-link" href="progress.html">📈 Progress</a>
+    </nav>
+  </div>
+</header>
+
+<div id="setupView">
+  <div class="page-hero">
+    <div class="hero-inner"><div class="hero-tag">পরীক্ষা মোড</div><h1>⏱ মক <span>টেস্ট</span></h1><p>সময়-নিয়ন্ত্রিত MCQ · স্বয়ংক্রিয় মূল্যায়ন</p></div>
+  </div>
+  <div class="container">
+    <div class="setup-wrap">
+      <div class="setup-card anim-up">
+        <h2>পরীক্ষার সেটআপ</h2>
+        <div class="setup-row"><label>বিষয়</label>
+          <select id="subSel"><option value="all">সব বিষয়</option><option value="intl">আন্তর্জাতিক বিষয়াবলি</option><option value="bd">বাংলাদেশ বিষয়াবলি</option></select>
+        </div>
+        <div class="setup-row"><label>প্রশ্ন সংখ্যা</label>
+          <select id="cntSel"><option value="5">৫টি</option><option value="10" selected>১০টি</option><option value="15">১৫টি</option><option value="all">সব</option></select>
+        </div>
+        <div class="setup-row"><label>সময়সীমা</label>
+          <select id="timeSel"><option value="0">সময়সীমা নেই</option><option value="5">৫ মিনিট</option><option value="10" selected>১০ মিনিট</option><option value="15">১৫ মিনিট</option></select>
+        </div>
+        <button class="btn btn-primary" onclick="startTest()" style="width:100%;font-size:.95rem;padding:11px;">পরীক্ষা শুরু করো →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="testView" style="display:none;">
+  <div class="test-bar">
+    <span id="qProg" style="font-size:.82rem;opacity:.7;"></span>
+    <span class="timer" id="timerEl">∞</span>
+    <button class="btn btn-ghost" onclick="endTest()" style="font-size:.75rem;padding:4px 11px;color:#fff;border-color:rgba(255,255,255,.3);">শেষ করো</button>
+  </div>
+  <div class="test-wrap">
+    <div class="prog-wrap" style="margin-bottom:1.5rem;"><div class="prog-bar" id="tProg" style="background:var(--gold);width:0%"></div></div>
+    <div id="testContent"></div>
+    <div style="display:flex;gap:10px;justify-content:space-between;margin-top:1.5rem;">
+      <button class="btn btn-ghost" onclick="prev()" id="prevBtn">← আগের</button>
+      <button class="btn btn-primary" onclick="next()" id="nextBtn">পরের →</button>
+    </div>
+  </div>
+</div>
+
+<div id="resultView" style="display:none;">
+  <div class="page-hero"><div class="hero-inner"><h1>ফলাফল</h1></div></div>
+  <div class="container">
+    <div class="res-card anim-up">
+      <div class="res-score"><span class="score-big" id="scoreBig"></span><span style="font-size:.85rem;color:var(--muted);">সঠিক উত্তর</span></div>
+      <div class="res-row">
+        <div class="rs"><div class="rs-n" id="rC" style="color:var(--teal)">০</div><div class="rs-l">✅ সঠিক</div></div>
+        <div class="rs"><div class="rs-n" id="rW" style="color:var(--red)">০</div><div class="rs-l">❌ ভুল</div></div>
+        <div class="rs"><div class="rs-n" id="rS" style="color:var(--gold)">০</div><div class="rs-l">⬜ এড়িয়ে</div></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="location.reload()" style="flex:1;">🔄 আবার দাও</button>
+        <a href="prelim.html" class="btn btn-ghost" style="flex:1;text-align:center;">📝 প্রশ্নব্যাংকে যাও</a>
+      </div>
+      <div id="reviewList" style="margin-top:1.25rem;"></div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="data-international.js"></script>
+<script src="data-bangladesh.js"></script>
+<script src="app.js"></script>
+<script>
+const ALL_PRELIM=[...INTL_PRELIM,...BD_PRELIM];
+let tQs=[],curIdx=0,answers={},tmr=null,tLeft=0;
+const letters=['ক','খ','গ','ঘ'];
+function shuffle(a){return[...a].sort(()=>Math.random()-.5);}
+function startTest(){
+  const sub=document.getElementById('subSel').value;
+  const cnt=document.getElementById('cntSel').value;
+  const mins=parseInt(document.getElementById('timeSel').value);
+  let pool=ALL_PRELIM.filter(q=>sub==='all'||q.subject===sub||q.sub===sub);
+  tQs=shuffle(pool).slice(0,cnt==='all'?pool.length:parseInt(cnt));
+  curIdx=0;answers={};
+  document.getElementById('setupView').style.display='none';
+  document.getElementById('testView').style.display='block';
+  if(mins>0){tLeft=mins*60;tmr=setInterval(()=>{tLeft--;const m=Math.floor(tLeft/60),s=tLeft%60;const el=document.getElementById('timerEl');el.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;if(tLeft<=60)el.classList.add('warn');if(tLeft<=0){clearInterval(tmr);endTest();}},1000);}
+  renderTQ();
+}
+function renderTQ(){
+  const q=tQs[curIdx];const total=tQs.length;
+  document.getElementById('qProg').textContent=`প্রশ্ন ${curIdx+1}/${total}`;
+  document.getElementById('tProg').style.width=((curIdx+1)/total*100)+'%';
+  document.getElementById('prevBtn').disabled=curIdx===0;
+  document.getElementById('nextBtn').textContent=curIdx===total-1?'ফলাফল দেখো ✓':'পরের →';
+  const sel=answers[curIdx];
+  document.getElementById('testContent').innerHTML=`
+    <div class="card" style="margin-bottom:1.25rem;">
+      <div class="mcq-q">${curIdx+1}. ${q.q}</div>
+      <div class="mcq-opts">
+        ${q.opts.map((o,i)=>`<div class="mcq-opt ${sel===i?'sel':''}" onclick="pickA(${i})" id="to-${i}"><div class="opt-l">${letters[i]}</div><span>${o}</span></div>`).join('')}
+      </div>
+    </div>`;
+}
+function pickA(i){answers[curIdx]=i;renderTQ();}
+function prev(){if(curIdx>0){curIdx--;renderTQ();}}
+function next(){if(curIdx<tQs.length-1){curIdx++;renderTQ();}else endTest();}
+function endTest(){
+  clearInterval(tmr);document.getElementById('testView').style.display='none';document.getElementById('resultView').style.display='block';
+  let c=0,w=0,s=0;
+  const rv=tQs.map((q,i)=>{
+    const ch=answers[i];const ok=ch===q.ans;const sk=ch===undefined;
+    if(ok)c++;else if(sk)s++;else w++;
+    return`<div class="rv-item ${ok?'':'w'}">
+      <div class="rv-q"><strong>${ok?'✅':sk?'⬜':'❌'} ${i+1}.</strong> ${q.q}</div>
+      <div style="font-size:.8rem;">
+        ${!sk?`<span style="color:${ok?'var(--teal)':'var(--red)'}">তোমার: ${letters[ch]} — ${q.opts[ch]}</span><br>`:'<span style="color:var(--gold)">এড়িয়ে গেছ</span><br>'}
+        <span style="color:var(--teal)">সঠিক: ${letters[q.ans]} — ${q.opts[q.ans]}</span>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('scoreBig').textContent=`${c}/${tQs.length}`;
+  document.getElementById('rC').textContent=c;document.getElementById('rW').textContent=w;document.getElementById('rS').textContent=s;
+  document.getElementById('reviewList').innerHTML=`<h3 style="font-family:'Noto Serif Bengali',serif;margin:1.5rem 0 1rem;">পর্যালোচনা</h3>${rv}`;
+}
+</script>
+</body>
+</html>
