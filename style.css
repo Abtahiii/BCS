@@ -1,0 +1,320 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Serif+Bengali:wght@400;600;700&display=swap');
+
+:root {
+  --ink: #1a1a2e;
+  --ink2: #2d2d4a;
+  --paper: #f8f6f0;
+  --paper2: #efe9dc;
+  --accent: #c0392b;
+  --accent2: #e74c3c;
+  --gold: #d4a017;
+  --gold2: #f0c040;
+  --teal: #0e6655;
+  --teal2: #1abc9c;
+  --blue: #1a5276;
+  --blue2: #2980b9;
+  --muted: #6b6b8a;
+  --border: rgba(26,26,46,0.12);
+  --shadow: 0 4px 24px rgba(26,26,46,0.10);
+  --shadow-lg: 0 8px 40px rgba(26,26,46,0.16);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Hind Siliguri', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--ink);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  border-bottom: 3px solid var(--gold);
+}
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 58px;
+  gap: 1rem;
+}
+.logo {
+  font-family: 'Noto Serif Bengali', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.logo span { color: var(--gold); }
+
+nav {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+nav::-webkit-scrollbar { display: none; }
+
+.nav-link {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.6);
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: 0.85rem;
+  padding: 7px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  text-decoration: none;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.18s;
+}
+.nav-link:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.nav-link.active { background: rgba(212,160,23,0.18); color: var(--gold2); }
+.nav-link .nav-icon { font-size: 0.9rem; }
+
+/* ── CONTAINER ── */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+.container-sm {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* ── PAGE HERO ── */
+.page-hero {
+  background: var(--ink2);
+  color: #fff;
+  padding: 2.5rem 1.5rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg, transparent, transparent 40px,
+    rgba(212,160,23,0.025) 40px, rgba(212,160,23,0.025) 41px
+  );
+}
+.page-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+.hero-tag {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 11px;
+  border-radius: 20px;
+  letter-spacing: 0.07em;
+  margin-bottom: 0.75rem;
+}
+.page-hero h1 {
+  font-family: 'Noto Serif Bengali', serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 0.5rem;
+}
+.page-hero h1 span { color: var(--gold); }
+.page-hero p { color: rgba(255,255,255,0.6); font-size: 0.93rem; }
+
+/* ── SECTION HEADING ── */
+.sec-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.sec-title {
+  font-family: 'Noto Serif Bengali', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 11px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--gold);
+}
+.badge-teal { background: var(--teal); color: #fff; }
+.badge-accent { background: var(--accent); color: #fff; }
+
+/* ── CARDS ── */
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  transition: all 0.2s;
+}
+.card:hover {
+  border-color: rgba(26,26,46,0.22);
+  box-shadow: var(--shadow);
+}
+.card-sm { padding: 1rem 1.25rem; }
+
+/* ── BUTTONS ── */
+.btn {
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover:not(:disabled) { background: var(--accent2); transform: translateY(-1px); }
+.btn-secondary { background: var(--ink); color: var(--gold); }
+.btn-secondary:hover:not(:disabled) { opacity: 0.88; }
+.btn-teal { background: var(--teal); color: #fff; }
+.btn-teal:hover:not(:disabled) { background: #0a5244; }
+.btn-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--muted); }
+.btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ── CHIP FILTERS ── */
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.25rem; }
+.chip {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: 0.8rem;
+  color: var(--muted);
+  padding: 5px 13px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.chip:hover { border-color: var(--ink); color: var(--ink); }
+.chip.active { background: var(--ink); border-color: var(--ink); color: var(--gold); font-weight: 600; }
+
+/* ── TOPIC TAG COLORS ── */
+.tag { font-size: 0.7rem; font-weight: 700; padding: 3px 9px; border-radius: 7px; }
+.tag-conflict  { background: #fde8e8; color: #991b1b; }
+.tag-geo       { background: #ede9fe; color: #5b21b6; }
+.tag-regional  { background: #d1fae5; color: #065f46; }
+.tag-economy   { background: #fef3c7; color: #92400e; }
+.tag-climate   { background: #dcfce7; color: #166534; }
+.tag-tech      { background: #dbeafe; color: #1e40af; }
+.tag-bangla    { background: #fce7f3; color: #9d174d; }
+.tag-math      { background: #f3f4f6; color: #374151; }
+.tag-science   { background: #ecfdf5; color: #065f46; }
+.tag-english   { background: #eff6ff; color: #1e40af; }
+.tag-bd        { background: #fff7ed; color: #9a3412; }
+
+/* ── FORM ELEMENTS ── */
+input[type="text"], input[type="password"], textarea, select {
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 13px;
+  outline: none;
+  transition: border-color 0.18s;
+  width: 100%;
+  color: var(--ink);
+  background: #fff;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--teal); }
+
+/* ── PROGRESS BAR ── */
+.prog-bar-wrap {
+  background: var(--paper2);
+  border-radius: 20px;
+  height: 8px;
+  overflow: hidden;
+}
+.prog-bar {
+  height: 100%;
+  border-radius: 20px;
+  background: var(--teal2);
+  transition: width 0.5s ease;
+}
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--ink);
+  color: var(--gold);
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 9999;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.modal-overlay.hidden { display: none; }
+.modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 460px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+}
+.modal h2 { font-family: 'Noto Serif Bengali', serif; font-size: 1.3rem; margin-bottom: 0.5rem; }
+.modal p { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.65; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(0.75)} }
+@keyframes spin { to { transform: rotate(360deg); } }
+.anim-up { animation: fadeUp 0.3s ease both; }
+.spin { animation: spin 1s linear infinite; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .page-hero h1 { font-size: 1.5rem; }
+  .container { padding: 1.25rem 1rem; }
+  .header-inner { padding: 0 1rem; }
+  .nav-link { font-size: 0.78rem; padding: 6px 9px; }
+}
